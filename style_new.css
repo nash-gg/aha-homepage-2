@@ -107,7 +107,6 @@ p {
 
 .topbar-input::placeholder {
   color: #cbd5e1;
-  text-transform: uppercase;
 }
 
 .topbar-btn {
