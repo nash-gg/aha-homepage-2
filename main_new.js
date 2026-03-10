@@ -173,9 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
       '--theme-text-secondary': '#475569',
       '--theme-card-text': '#1a1a2e',
       '--theme-card-desc': '#64748b',
-      '--theme-icon': '#64748b',
-      '--theme-cta-bg': '#6d28d9',
-      '--theme-cta-text': '#ffffff',
       ease: 'none',
       scrollTrigger: { trigger: trigger1, start: 'top 20%', end: 'top top', scrub: 1 }
     });

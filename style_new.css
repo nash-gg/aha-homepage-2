@@ -7,7 +7,6 @@
   --secondary-color: #f1f5f9;
   --accent-color: #a855f7;
   --font-family: 'Plus Jakarta Sans', sans-serif;
-  --transition-speed: 0.3s;
 
   /* Hero Section Defaults (Light Theme) */
   --theme-bg: #FDF6FA;
@@ -17,9 +16,6 @@
   --theme-gradient-mid: rgba(30, 41, 59, 0.05);
   --theme-card-text: #1e293b;
   --theme-card-desc: #64748b;
-  --theme-icon: #64748b;
-  --theme-cta-bg: #6d28d9;
-  --theme-cta-text: #ffffff;
 
   /* Transition Zone 1: Create -> Why Pick */
   --theme-1-bg: #1a1a2e;
