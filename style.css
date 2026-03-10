@@ -1474,7 +1474,6 @@ header .nav-item {
 
 .author-brand-wrap {
   display: flex;
-  align-items: left;
   gap: 1.5rem;
 }
 
@@ -1698,7 +1697,6 @@ header .nav-item {
   }
 
   .testimonial-footer {
-    align-items: left;
     text-align: left;
   }
 
