@@ -58,11 +58,13 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   line-height: 110%;
   display: block;
+  text-align: inherit;
 }
 
 p {
   font-weight: 400;
   line-height: 150%;
+  max-width: inherit;
 }
 
 /* Topbar */
@@ -781,7 +783,6 @@ p {
 .card-cta:hover {
   background: #FF4282;
   color: #ffffff;
-  transform: translateY(-2px);
   box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.2);
 }
 
@@ -985,6 +986,9 @@ p {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  border: none;
+  justify-content: flex-start;
+  width: auto;
 }
 
 .metric-number {
@@ -1052,6 +1056,9 @@ p {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  height: auto;
+  margin-bottom: 0;
+  padding: 0;
 }
 
 .blog-card:hover {
@@ -1303,6 +1310,9 @@ p {
   line-height: 1.25;
   position: relative;
   z-index: 1;
+  border-left: none;
+  margin: 0;
+  padding: 0;
 }
 
 .testimonial-footer {
@@ -1339,6 +1349,8 @@ p {
   display: flex;
   align-items: center;
   opacity: 1;
+  padding: 0;
+  width: auto;
   /* Logos in cards should be full color */
 }
 

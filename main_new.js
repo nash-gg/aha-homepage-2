@@ -1,5 +1,3 @@
-console.log("Website environment initialized successfully!");
-
 document.addEventListener('DOMContentLoaded', () => {
   // Using GSAP from CDN, available globally
   gsap.registerPlugin(ScrollTrigger);
