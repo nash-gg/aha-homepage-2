@@ -571,19 +571,6 @@ p {
   margin-bottom: 2rem;
 }
 
-.create-cta {
-  background: var(--theme-cta-bg);
-  color: var(--theme-cta-text);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.create-cta:hover {
-  background: #f1f5f9;
-  color: #FF4282;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px -6px rgba(255, 66, 130, 0.3);
-}
-
 /* Sticky stacking list */
 .cards-list {
   list-style: none;
@@ -1161,18 +1148,6 @@ p {
   line-height: 1.5;
 }
 
-.faq-contact {
-  color: #6d28d9;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: opacity 0.2s;
-}
-
-.faq-contact:hover {
-  opacity: 0.8;
-}
-
 .accordion {
   background: #f8f9fa;
   border-radius: 24px;
@@ -1205,11 +1180,11 @@ p {
 }
 
 .accordion-header:hover {
-  color: #6d28d9;
+  color: #6a1ebb;
 }
 
 .accordion-item.active .accordion-header {
-  color: #6d28d9;
+  color: #6a1ebb;
 }
 
 .accordion-header i {
