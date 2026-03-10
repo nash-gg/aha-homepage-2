@@ -1345,26 +1345,10 @@ p {
 /* Button overrides removed in favor of unified system */
 
 @media (max-width: 991px) {
-
-  /* Header & Nav */
-  header {
-    padding: 1rem;
-  }
-
   .topbar {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
   }
-
-  .nav-links {
-    display: none;
-    /* Simplification for desktop/mobile transition */
-  }
-
-  .nav-left {
-    gap: 1rem;
-  }
-
 
   /* Hero */
   .hero-container {
@@ -1389,11 +1373,6 @@ p {
   .hero-content p {
     font-size: 18px;
     margin-bottom: 2rem;
-  }
-
-  .btn-primary.large {
-    padding: 0.8rem 2rem;
-    font-size: 1rem;
   }
 
   .visual-item.speaker {
@@ -1504,39 +1483,6 @@ p {
     justify-content: space-between;
   }
 
-  /* Nav Adjustment */
-  header,
-  .sticky-header {
-    padding: 0.75rem 1rem;
-  }
-
-  .mobile-menu-toggle {
-    display: block;
-  }
-
-  .nav-left {
-    gap: 0.75rem;
-    flex: 1;
-  }
-
-  .nav-right {
-    gap: 0.75rem;
-  }
-
-  .nav-right .nav-item,
-  .nav-right .btn-ghost {
-    display: none;
-    /* Hide Language and Login on mobile */
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .logo img {
-    height: 24px;
-  }
-
   /* Hero */
 
 
@@ -1564,12 +1510,6 @@ p {
     color: var(--theme-text-secondary);
   }
 
-  .btn-primary.btn-lg {
-    padding: 1.125rem 2rem;
-    font-size: 1.25rem;
-    border-radius: 12px;
-  }
-
   .social-proof {
     margin-top: 2rem;
     gap: 0.75rem;
@@ -1590,13 +1530,6 @@ p {
   .reviews {
     font-size: 1rem;
     opacity: 0.6;
-  }
-
-  .nav-right .btn-primary.btn-sm {
-    display: block;
-    padding: 0.6rem 1.25rem;
-    font-size: 0.9rem;
-    border-radius: 8px;
   }
 
   .hero-visuals {
