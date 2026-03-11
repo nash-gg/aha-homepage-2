@@ -313,20 +313,34 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- INTERACTIVE ELEMENTS ---
 
   // FAQ Accordion
-  const accordionItems = document.querySelectorAll('.accordion-item');
-  accordionItems.forEach(item => {
-    const header = item.querySelector('.accordion-header');
-    header.addEventListener('click', () => {
-      const isActive = item.classList.contains('active');
-      accordionItems.forEach(i => {
-        i.classList.remove('active');
-        const icon = i.querySelector('.ph');
-        if (icon) { icon.classList.replace('ph-minus', 'ph-plus'); }
-      });
-      if (!isActive) {
-        item.classList.add('active');
-        const icon = item.querySelector('.ph');
-        if (icon) { icon.classList.replace('ph-plus', 'ph-minus'); }
+  const accordionItems = [...document.querySelectorAll('.accordion-item')];
+
+  const plusPath = '<path d="M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z"></path>';
+  const minusPath = '<path d="M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z"></path>';
+
+  const itemMap = accordionItems.map(item => ({
+    item,
+    header: item.querySelector('.accordion-header'),
+    icon: item.querySelector('.accordion-icon')
+  }));
+
+  function updateItem(target, active) {
+    target.item.classList.toggle('active', active);
+    if (target.icon) {
+      target.icon.innerHTML = active ? plusPath : minusPath;
+    }
+  }
+
+  itemMap.forEach(target => {
+    if (!target.header) return;
+
+    target.header.addEventListener('click', () => {
+      const willOpen = !target.item.classList.contains('active');
+
+      itemMap.forEach(entry => updateItem(entry, false));
+
+      if (willOpen) {
+        updateItem(target, true);
       }
     });
   });

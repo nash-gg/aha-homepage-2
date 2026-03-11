@@ -886,7 +886,7 @@ p {
   margin-right: 0.25rem;
 }
 
-.distraction-cta i {
+.distraction-cta svg {
   vertical-align: middle;
 }
 
@@ -1288,7 +1288,7 @@ p {
   margin-right: 0.25rem;
 }
 
-.read-more i {
+.read-more svg {
   vertical-align: middle;
 }
 
