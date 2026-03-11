@@ -1237,6 +1237,7 @@ p {
 .testimonial-footer {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 1.5rem;
   margin-top: auto;
 }
@@ -1273,23 +1274,11 @@ p {
   /* Logos in cards should be full color */
 }
 
-.brand-logo img {
+.brand-logo-img {
   height: 50px;
   width: 120px;
   object-fit: contain;
   display: block;
-}
-
-.read-more {
-  font-size: 0.85rem;
-}
-
-.read-more span {
-  margin-right: 0.25rem;
-}
-
-.read-more svg {
-  vertical-align: middle;
 }
 
 .testimonial-image {
@@ -1298,7 +1287,7 @@ p {
   min-height: 350px;
 }
 
-.testimonial-image img {
+.testimonial-image-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
