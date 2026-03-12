@@ -160,10 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const moreItems = lastUsecaseCard.querySelectorAll('.more-item')
     const moreMain = lastUsecaseCard.querySelector('.more-main')
 
-    gsap.set(moreItems, { y: 400 })
-    gsap.set(moreMain, { y: 220 })
-
     const buildMoreTimeline = (opts) => {
+      gsap.set(moreItems, { y: 400 })
+      gsap.set(moreMain, { y: 220 })
+
       const moreTl = gsap.timeline({
         scrollTrigger: {
           trigger: lastUsecaseCard,
