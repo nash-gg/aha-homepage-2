@@ -186,13 +186,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .to('.item-4', { y: opts.dispersalSmall, duration: 2, ease: 'power1.out' }, 1.5)
     }
 
-    ScrollTrigger.matchMedia({
-      '(max-width: 767px)': () => {
-        buildMoreTimeline({ end: 'bottom top+=1200', scrub: 2, dispersalLarge: -150, dispersalSmall: -120 })
-      },
-      '(min-width: 768px)': () => {
-        buildMoreTimeline({ end: 'bottom top+=800', scrub: 1.5, dispersalLarge: -280, dispersalSmall: -220 })
-      }
+    const mm = gsap.matchMedia()
+    mm.add('(max-width: 767px)', () => {
+      buildMoreTimeline({ end: 'bottom top+=1200', scrub: 2, dispersalLarge: -150, dispersalSmall: -120 })
+    })
+    mm.add('(min-width: 768px)', () => {
+      buildMoreTimeline({ end: 'bottom top+=800', scrub: 1.5, dispersalLarge: -280, dispersalSmall: -220 })
     })
   }
 
