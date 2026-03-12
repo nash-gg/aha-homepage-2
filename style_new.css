@@ -1754,8 +1754,6 @@ p {
     width: 160px;
     height: auto;
     object-fit: cover;
-    filter: grayscale(100%);
-    transition: filter 0.3s;
   }
 
   .author-brand-wrap {
