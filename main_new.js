@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
       createWords = createMainTitle.querySelectorAll('.create-h2-word');
     }
 
-    const underlineTrigger = createMainTitle.querySelector('.ai-underline-trigger');
+    const underlineTrigger = createMainTitle.parentElement.querySelector('.ai-underline-trigger')
 
     gsap.set(createWords, { y: 28, opacity: 0 });
     gsap.set(firstCardImageWrap, { y: 80, scale: 0.9, opacity: 0 });
