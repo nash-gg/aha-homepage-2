@@ -7,6 +7,7 @@
   --secondary-color: #f1f5f9;
   --accent-color: #a855f7;
   --font-family: 'Plus Jakarta Sans', sans-serif;
+  --transition-speed: 0.3s;
 
   /* Hero Section Defaults (Light Theme) */
   --theme-bg: #FDF6FA;
@@ -16,6 +17,9 @@
   --theme-gradient-mid: rgba(30, 41, 59, 0.05);
   --theme-card-text: #1e293b;
   --theme-card-desc: #64748b;
+  --theme-icon: #64748b;
+  --theme-cta-bg: #6d28d9;
+  --theme-cta-text: #ffffff;
 
   /* Transition Zone 1: Create -> Why Pick */
   --theme-1-bg: #1a1a2e;
@@ -46,17 +50,31 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   overflow-x: hidden;
-  line-height: 1.5;
+  max-width: 100vw;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--transition-speed);
+}
+
+a:hover {
+  color: var(--primary-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 a {
   font-weight: 600;
   line-height: 110%;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  line-height: 110%;
   display: block;
   text-align: inherit;
 }
@@ -107,6 +125,7 @@ p {
 
 .topbar-input::placeholder {
   color: #cbd5e1;
+  text-transform: uppercase;
 }
 
 .topbar-btn {
@@ -117,6 +136,7 @@ p {
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
+  line-height: normal;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -437,10 +457,12 @@ p {
 
 /* What You Can Create Section */
 .create-section {
-  padding: 6rem 1rem 0;
+  padding: 6rem 1rem;
   background-color: var(--theme-1-bg);
   display: flex;
   justify-content: center;
+  position: relative;
+  z-index: 2;
 }
 
 .create-container {
@@ -451,8 +473,8 @@ p {
 
 .create-header {
   text-align: center;
-  margin-bottom: 4rem;
-  max-width: 700px;
+  margin-bottom: 6rem;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -460,7 +482,7 @@ p {
 .create-header h2 {
   font-size: 2.5rem;
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .create-header p {
@@ -477,8 +499,6 @@ p {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding-bottom: 96px;
-  /* Provides scroll room for the last card's dispersal */
 }
 
 /* Each card sticks — later cards physically slide over earlier ones */
@@ -486,13 +506,15 @@ p {
   position: sticky;
   top: 4rem;
   margin-bottom: 5rem;
-  /* Reduced to allow stacking feel */
   border-radius: 24px;
   overflow: hidden;
-  /* Dark background matching reference */
-  /* Only transition box-shadow; GSAP handles scale and opacity */
+  background-color: var(--theme-1-bg);
   transition: box-shadow 0.6s ease;
-
+  /* Prevent sub-pixel rendering gaps during scale/scroll */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 
 /* Inner: natural flow layout */
@@ -510,10 +532,11 @@ p {
   display: flex;
   justify-content: center;
   overflow: hidden;
-  /* Ensure enough space for children */
+  background-color: var(--theme-1-bg);
 }
 
-.usecase-card__image-wrap.static-image {
+.usecase-card__image-wrap.static-image,
+.usecase-card__image-wrap.complex-image {
   max-width: 1000px;
 }
 
@@ -536,7 +559,7 @@ p {
   /* Larger on desktop */
   border-radius: 16px;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
-  z-index: 10;
+  z-index: 1;
   position: relative;
   background: #fff;
   padding: 12px;
@@ -548,7 +571,7 @@ p {
   /* Larger side images */
   border-radius: 12px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-  z-index: 5;
+  z-index: 1;
   background: #fff;
   padding: 8px;
 }
@@ -565,22 +588,22 @@ p {
 
 .item-1 {
   top: 25%;
-  left: -2%;
+  left: 0;
 }
 
 .item-2 {
   top: 25%;
-  right: -3%;
+  right: 0;
 }
 
 .item-3 {
   bottom: 0%;
-  left: -5%;
+  left: 0;
 }
 
 .item-4 {
   bottom: 5%;
-  right: -2%;
+  right: 0;
 }
 
 .usecase-card__image {
@@ -596,8 +619,9 @@ p {
 /* Gradient: subtle bottom fade for text contrast */
 .usecase-card__gradient {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, var(--theme-1-bg) 0%, color-mix(in srgb, var(--theme-1-bg) 50%, transparent) 50%, transparent 100%);
+  inset: -1px 0;
+  /* Extend slightly to prevent gaps */
+  background: linear-gradient(0deg, var(--theme-1-bg) 0%, rgba(26, 26, 46, 0.2) 50%, transparent 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -700,24 +724,88 @@ p {
   transform: scale(1);
 }
 
+
+
+.create-main-title {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  color: #ffffff;
+  text-align: center;
+  max-width: 100%;
+  line-height: 1.1;
+  z-index: 2;
+}
+
+.create-main-title .create-h2-word {
+  display: inline-block;
+  margin-right: 0.2em;
+}
+
+.highlight-underline {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.icon-basic-underline {
+  position: absolute;
+  bottom: -50%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Method in neutral, class-agnostic form */
+.ai-underline-svg path {
+  fill: none;
+  stroke: #FF4081;
+  stroke-width: 20;
+  stroke-linecap: round;
+
+  /* L = 1 (due to pathLength="1" on the SVG path) */
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  /* hidden */
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.ai-underline-trigger:hover .ai-underline-svg path,
+.ai-underline-trigger:focus-visible .ai-underline-svg path,
+.ai-underline-trigger.ai-underline-active .ai-underline-svg path {
+  stroke-dashoffset: 0;
+  /* revealed */
+}
+
+/* Extended background to cover white space above and below during pin */
+/* Extended background to cover white space during pin - constrained to parent */
+
+
 .gradient-transition-hero {
-  height: 0px;
-  /* Follows the same pattern as other transitions:
-       gradient element is the trigger, and it smoothly blends
-       the section ABOVE (hero) into the section BELOW (create). */
-  background: linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-1-bg) 100%);
+  height: 120px;
+  background: linear-gradient(180deg,
+      var(--theme-bg) 0%,
+      color-mix(in srgb, var(--theme-bg), var(--theme-1-bg) 20%) 30%,
+      color-mix(in srgb, var(--theme-bg), var(--theme-1-bg) 50%) 50%,
+      color-mix(in srgb, var(--theme-bg), var(--theme-1-bg) 80%) 70%,
+      var(--theme-1-bg) 100%);
 }
 
 
 .gradient-transition-what-you-can-create {
-  height: 0px;
-  background: linear-gradient(180deg, var(--theme-1-gradient-start) 0%, #F4F8FF 100%);
+  height: 120px;
+  background: linear-gradient(180deg,
+      var(--theme-1-bg) 0%,
+      color-mix(in srgb, var(--theme-1-bg), var(--theme-2-bg) 20%) 30%,
+      color-mix(in srgb, var(--theme-1-bg), var(--theme-2-bg) 50%) 50%,
+      color-mix(in srgb, var(--theme-1-bg), var(--theme-2-bg) 80%) 70%,
+      var(--theme-2-bg) 100%);
 }
 
-/* Why Pick AhaSlides Section */
 .why-pick-section {
   background-color: var(--theme-2-bg);
-  padding: 6rem 2rem;
+  padding: 6rem 2rem 0;
   display: flex;
   justify-content: center;
 }
@@ -812,25 +900,39 @@ p {
 /* Button overrides removed in favor of unified system */
 
 .gradient-transition-why-pick {
-  height: 30px;
-  background: linear-gradient(180deg, var(--theme-2-gradient-start) 0%, #FFF 100%);
+  height: 120px;
+  background: linear-gradient(180deg,
+      var(--theme-2-bg) 0%,
+      color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 20%) 30%,
+      color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 50%) 50%,
+      color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 80%) 70%,
+      var(--theme-3-bg) 100%);
 }
 
 .gradient-transition-testimonials {
-  height: 30px;
-  background: linear-gradient(180deg, var(--theme-3-gradient-start) 0%, #FFE3E9 100%);
+  height: 120px;
+  background: linear-gradient(180deg,
+      var(--theme-3-bg) 0%,
+      color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 20%) 30%,
+      color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 50%) 50%,
+      color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 80%) 70%,
+      var(--theme-4-bg) 100%);
 }
 
 .gradient-transition-blog {
-  height: 30px;
-  background: linear-gradient(180deg, var(--theme-4-gradient-start) 0%, #FFFFFF 100%);
+  height: 120px;
+  background: linear-gradient(180deg,
+      var(--theme-4-bg) 0%,
+      color-mix(in srgb, var(--theme-4-bg), #FFFFFF 20%) 30%,
+      color-mix(in srgb, var(--theme-4-bg), #FFFFFF 50%) 50%,
+      color-mix(in srgb, var(--theme-4-bg), #FFFFFF 80%) 70%,
+      #FFFFFF 100%);
 }
-
 
 /* Distraction Section */
 .distraction-section {
   background-color: var(--theme-4-bg);
-  padding: 8rem 2rem;
+  padding: 2rem 2rem 8rem;
   display: flex;
   justify-content: center;
 }
@@ -861,15 +963,18 @@ p {
 }
 
 .distraction-cta {
+  color: #6d28d9;
+  font-weight: 600;
   font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: transform 0.2s;
 }
 
-.distraction-cta span {
-  margin-right: 0.25rem;
-}
-
-.distraction-cta svg {
-  vertical-align: middle;
+.distraction-cta:hover {
+  transform: translateX(5px);
 }
 
 .distraction-metrics {
@@ -1134,7 +1239,7 @@ p {
 /* Testimonials Section */
 .testimonials-section {
   background-color: var(--theme-3-bg);
-  padding: 6rem 2rem;
+  padding: 6rem 2rem 0;
   display: flex;
   justify-content: center;
 }
@@ -1242,6 +1347,7 @@ p {
 
 .author-brand-wrap {
   display: flex;
+  align-items: left;
   gap: 1.5rem;
 }
 
@@ -1426,6 +1532,7 @@ p {
   }
 
   .testimonial-footer {
+    align-items: left;
     text-align: left;
   }
 
@@ -1527,60 +1634,32 @@ p {
   .visual-item.speaker {
     width: 90vw;
     max-width: 400px;
-    z-index: 50;
 
   }
 
 
 
-  .chart-1 {
-    top: 0%;
-    left: -5%;
-  }
-
-  .word-cloud {
-    top: 5%;
-    right: -10%;
-  }
-
-  .audience-1 {
-    bottom: 5%;
-    left: -15%;
-    z-index: 100;
-  }
-
-  .poll {
-    bottom: -5%;
-    right: -20%;
-  }
-
-  .leaderboard {
-    bottom: -22%;
-    right: 15%;
-    z-index: 51;
-  }
 
   /* Integrations */
-
   .integrations h3 {
     font-size: 1.5rem;
     margin-bottom: 2rem;
   }
 
   .integration-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: .5rem;
+    gap: 0.5rem;
     width: 100%;
   }
 
   .integration-card {
+    flex: 0 0 calc(50% - 0.25rem);
     padding: 12px 8px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     justify-content: center;
     gap: .5rem;
-    width: 100%;
   }
 
   /* Sections */
@@ -1691,16 +1770,34 @@ p {
   }
 }
 
-@media (max-width: 991px) {
-  .visual-item.bg-logo {
-    width: 400%;
+@media screen and (max-width: 991px) {
+  .visual-item.floating {
+    /* Scale down floating elements for mobile */
+    transform: scale(0.8);
   }
-}
 
-@media (max-width: 767px) {
-  .visual-item.bg-logo {
-    width: 400%;
-    transform: translate(-10%, 50%) !important;
+  .audience-1 {
+    top: 5%;
+    left: -5%;
+  }
+
+  .quiz-chart {
+    bottom: -10%;
+    left: -5%;
+    z-index: 2;
+
+  }
+
+  .audience-2 {
+    bottom: -10%;
+    right: -10%;
+    z-index: 2;
+
+  }
+
+  .phone-chart {
+    top: 5%;
+    right: -5%;
   }
 }
 
@@ -1709,11 +1806,94 @@ p {
     /* Scale down floating elements for mobile */
     transform: scale(0.8);
   }
+
+  .audience-1 {
+    top: 0%;
+    left: 0%;
+  }
+
+  .quiz-chart {
+    bottom: -20%;
+    left: 0;
+    z-index: 2;
+
+  }
+
+  .audience-2 {
+    bottom: -10%;
+    right: 0;
+    z-index: 2;
+
+  }
+
+  .phone-chart {
+    top: 0;
+    right: 0;
+  }
 }
 
 @media screen and (max-width: 478px) {
+  .create-main-title {
+    font-size: 2rem;
+  }
+
+  .gradient-transition-hero {
+    height: 150px;
+  }
+
+  .gradient-transition-what-you-can-create {
+    height: 150px;
+  }
+
+  .create-header h2 {
+    font-size: 1.75rem;
+    color: #fff;
+    margin-bottom: 2rem;
+  }
+
+  .hero-content h1 {
+    font-size: 28px;
+  }
+
+  .topbar-url {
+    display: none;
+    /* Hide URL label to save space in topbar */
+  }
+
+  .topbar-input {
+    width: 80px;
+    /* Smaller input */
+  }
+
+  .hero-slide {
+    width: 120%;
+    /* Let images take a bit more room */
+  }
+
   .visual-item.floating {
     /* Scale down floating elements for mobile */
-    transform: scale(0.6);
+    transform: scale(0.6) !important;
+
+  }
+
+  .audience-1 {
+    top: 0%;
+    left: -10%;
+  }
+
+  .quiz-chart {
+    bottom: -25%;
+    left: -12%;
+    z-index: 2;
+  }
+
+  .audience-2 {
+    bottom: -20%;
+    right: -20%;
+  }
+
+  .phone-chart {
+    top: 0;
+    right: -12%;
   }
 }
