@@ -3,23 +3,6 @@ console.log("Website environment initialized successfully!");
 document.addEventListener('DOMContentLoaded', () => {
   // Using GSAP from CDN, available globally
   gsap.registerPlugin(ScrollTrigger);
-  // Topbar and Hero Height adjustments
-  const mainHeader = document.querySelector('header');
-  const stickyHeader = document.querySelector('.sticky-header');
-
-
-  const adjustHeroHeight = () => {
-    const topbar = document.querySelector('.topbar');
-    let offset = 0;
-    if (topbar) offset += topbar.offsetHeight;
-    if (mainHeader) offset += mainHeader.offsetHeight;
-    document.documentElement.style.setProperty('--header-offset', `${offset}px`);
-  };
-
-
-
-  window.addEventListener('resize', adjustHeroHeight);
-  adjustHeroHeight();
 
   // --- Hero Visuals Entrance Animation ---
   const heroBg = document.querySelector('.hero-visuals-bg');
@@ -184,29 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
       .to('.item-3', { y: dispersalSmall, duration: 2, ease: 'power1.out' }, 1.4)
       .to('.item-4', { y: dispersalSmall, duration: 2, ease: 'power1.out' }, 1.5);
   }
-
-  // --- STICKY HEADER LOGIC ---
-  let lastScrollY = window.scrollY;
-
-  window.addEventListener('scroll', () => {
-    const currentScrollY = window.scrollY;
-    const mainHeaderBottom = mainHeader.offsetHeight + mainHeader.offsetTop;
-
-    // Display sticky header ONLY when the original header is gone AND user scrolls UP
-    if (currentScrollY > mainHeaderBottom + 100) {
-      if (currentScrollY < lastScrollY) {
-        // Scrolling UP - show
-        stickyHeader.classList.add('visible');
-      } else if (currentScrollY > lastScrollY + 10) {
-        // Scrolling DOWN - hide (added 10px threshold to avoid sensitivity issues)
-        stickyHeader.classList.remove('visible');
-      }
-    } else {
-      // Near top - hide
-      stickyHeader.classList.remove('visible');
-    }
-    lastScrollY = currentScrollY;
-  }, { passive: true });
 
   // --- THEME & STICKY BG TRANSITIONS ---
   const root = document.documentElement;
