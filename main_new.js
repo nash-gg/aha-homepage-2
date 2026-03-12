@@ -1,6 +1,74 @@
+console.log("Website environment initialized successfully!");
+
 document.addEventListener('DOMContentLoaded', () => {
   // Using GSAP from CDN, available globally
   gsap.registerPlugin(ScrollTrigger);
+  // Topbar and Hero Height adjustments
+  const mainHeader = document.querySelector('header');
+  const stickyHeader = document.querySelector('.sticky-header');
+
+
+  const adjustHeroHeight = () => {
+    const topbar = document.querySelector('.topbar');
+    let offset = 0;
+    if (topbar) offset += topbar.offsetHeight;
+    if (mainHeader) offset += mainHeader.offsetHeight;
+    document.documentElement.style.setProperty('--header-offset', `${offset}px`);
+  };
+
+
+
+  window.addEventListener('resize', adjustHeroHeight);
+  adjustHeroHeight();
+
+  // --- Hero Visuals Entrance Animation ---
+  const heroBg = document.querySelector('.hero-visuals-bg');
+  const speaker = document.querySelector('.visual-item.speaker');
+  const floatingItems = document.querySelectorAll('.visual-item.floating');
+
+  if (heroBg || speaker || floatingItems.length > 0) {
+    const tl = gsap.timeline({ delay: 0.1 });
+
+    // 1. BG Entrance
+    if (heroBg) {
+      tl.fromTo(heroBg,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5, ease: "power2.out" }
+      );
+    }
+
+    // 2. Speaker Entrance
+    if (speaker) {
+      tl.fromTo(speaker,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out"
+        },
+        "-=0.2"
+      );
+    }
+
+    // 3. Floating Elements Entrance (Staggered)
+    if (floatingItems.length > 0) {
+      tl.fromTo(floatingItems,
+        { opacity: 0, scale: 0.95 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "back.out(1.2)"
+        },
+        "-=0.2"
+      );
+    }
+  }
+
+  // --- Logo Scale Animation ---
+
+
 
   // Sticky Stacking Cards Logic
   const initStackingCards = (cardSelector, activeClass, inactiveClass, stickyTop, immediateTransition = false) => {
@@ -88,15 +156,20 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.set(moreMain, { y: 220 });
 
     // Single continuous timeline for Rise -> Dispersal without pinning
+    const isMobile = window.innerWidth < 768;
+
     const moreTl = gsap.timeline({
       scrollTrigger: {
         trigger: lastUsecaseCard,
         start: 'top bottom', // Start rising when top of card enters bottom
-        end: 'bottom top+=150',   // Give a bit more scroll distance for a calmer motion
-        scrub: 1,            // Linear scrub for maximum smoothness
+        end: isMobile ? 'bottom top+=1200' : 'bottom top+=800',
+        scrub: isMobile ? 2 : 1.5, // Even more smoothing on mobile
         invalidateOnRefresh: true
       }
     });
+
+    const dispersalLarge = isMobile ? -150 : -280;
+    const dispersalSmall = isMobile ? -120 : -220;
 
     // Rise to center
     moreTl.to([moreItems, moreMain], {
@@ -105,17 +178,49 @@ document.addEventListener('DOMContentLoaded', () => {
       duration: 1.2,
       ease: 'power2.out'
     })
-      // Disperse slightly upward, with easing, for a more subtle translation
-      .to('.item-1', { y: -520, duration: 2, ease: 'power1.out' }, 1.2)
-      .to('.item-2', { y: -520, duration: 2, ease: 'power1.out' }, 1.3)
-      .to('.item-3', { y: -440, duration: 2, ease: 'power1.out' }, 1.4)
-      .to('.item-4', { y: -440, duration: 2, ease: 'power1.out' }, 1.5);
+      // Disperse with screen-size aware values
+      .to('.item-1', { y: dispersalLarge, duration: 2, ease: 'power1.out' }, 1.2)
+      .to('.item-2', { y: dispersalLarge, duration: 2, ease: 'power1.out' }, 1.3)
+      .to('.item-3', { y: dispersalSmall, duration: 2, ease: 'power1.out' }, 1.4)
+      .to('.item-4', { y: dispersalSmall, duration: 2, ease: 'power1.out' }, 1.5);
   }
+
+  // --- STICKY HEADER LOGIC ---
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    const mainHeaderBottom = mainHeader.offsetHeight + mainHeader.offsetTop;
+
+    // Display sticky header ONLY when the original header is gone AND user scrolls UP
+    if (currentScrollY > mainHeaderBottom + 100) {
+      if (currentScrollY < lastScrollY) {
+        // Scrolling UP - show
+        stickyHeader.classList.add('visible');
+      } else if (currentScrollY > lastScrollY + 10) {
+        // Scrolling DOWN - hide (added 10px threshold to avoid sensitivity issues)
+        stickyHeader.classList.remove('visible');
+      }
+    } else {
+      // Near top - hide
+      stickyHeader.classList.remove('visible');
+    }
+    lastScrollY = currentScrollY;
+  }, { passive: true });
 
   // --- THEME & STICKY BG TRANSITIONS ---
   const root = document.documentElement;
 
-  // Initial State (Hero)
+  // Zone 0: Hero -> Create
+  const trigger0 = document.querySelector('.gradient-transition-hero');
+  if (trigger0) {
+    gsap.to(root, {
+      '--theme-bg': '#1a1a2e',
+      '--theme-text': '#ffffff',
+      ease: 'none',
+      scrollTrigger: { trigger: trigger0, start: 'bottom 95%', end: 'top top', scrub: 1 }
+    });
+  }
 
   // Zone 1: Create -> Why Pick
   const trigger1 = document.querySelector('.gradient-transition-what-you-can-create');
@@ -127,8 +232,11 @@ document.addEventListener('DOMContentLoaded', () => {
       '--theme-text-secondary': '#475569',
       '--theme-card-text': '#1a1a2e',
       '--theme-card-desc': '#64748b',
+      '--theme-icon': '#64748b',
+      '--theme-cta-bg': '#6d28d9',
+      '--theme-cta-text': '#ffffff',
       ease: 'none',
-      scrollTrigger: { trigger: trigger1, start: 'top 20%', end: 'top top', scrub: 1 }
+      scrollTrigger: { trigger: trigger1, start: 'center 80%', end: 'center 20%', scrub: 1 }
     });
   }
 
@@ -139,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
       '--theme-2-bg': '#FFF',
       '--theme-2-gradient-start': '#FFF',
       ease: 'none',
-      scrollTrigger: { trigger: trigger2, start: 'bottom 90%', end: 'top top', scrub: 1 }
+      scrollTrigger: { trigger: trigger2, start: 'center 80%', end: 'center 20%', scrub: 1 }
     });
   }
 
@@ -150,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
       '--theme-3-bg': '#FFE3E9',
       '--theme-3-gradient-start': '#FFE3E9',
       ease: 'none',
-      scrollTrigger: { trigger: trigger3, start: 'bottom 90%', end: 'top top', scrub: 1 }
+      scrollTrigger: { trigger: trigger3, start: 'center 80%', end: 'center 20%', scrub: 1 }
     });
   }
 
@@ -161,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
       '--theme-4-bg': '#FFFFFF',
       '--theme-4-gradient-start': '#FFFFFF',
       ease: 'none',
-      scrollTrigger: { trigger: trigger4, start: 'bottom 95%', end: 'top top', scrub: 1 }
+      scrollTrigger: { trigger: trigger4, start: 'center 80%', end: 'center 20%', scrub: 1 }
     });
   }
 
@@ -169,39 +277,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // --- REVEAL ANIMATIONS ---
-  const revealElements = document.querySelectorAll('.why-pick-header, .testimonials-header, .science-header, .science-cta, .faq-header');
-  revealElements.forEach(header => {
-    const els = header.children;
-    gsap.set(els, { y: 30, opacity: 0 });
+  // --- UNIFIED REVEAL ANIMATIONS (from "Why pick" to end of page) ---
+  const revealConfig = {
+    y: 30,
+    opacity: 0,
+    duration: 0.5,
+    ease: "power2.out",
+    stagger: 0.1,
+    start: "top 85%"
+  };
+
+  const setupReveal = (trigger, elements, customConfig = {}) => {
+    const triggerEl = document.querySelector(trigger);
+    if (!triggerEl) return;
+
+    const config = { ...revealConfig, ...customConfig };
+    const els = elements ? triggerEl.querySelectorAll(elements) : [triggerEl];
+
+    if (els.length === 0) return;
+
+    // Set initial state
+    gsap.set(els, { y: config.y, opacity: 0 });
+
     ScrollTrigger.create({
-      trigger: header,
-      start: 'top 85%',
+      trigger: triggerEl,
+      start: config.start,
       onEnter: () => {
-        gsap.to(els, { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' });
+        gsap.to(els, {
+          y: 0,
+          opacity: 1,
+          duration: config.duration,
+          stagger: config.stagger,
+          ease: config.ease,
+          overwrite: 'auto'
+        });
       },
       once: true
     });
-  });
+  };
 
-  // --- "WELCOME TO THE SHOW" — What You Can Create section entrance ---
-  const createSection = document.querySelector('#what-you-can-create');
-  const createHeader = document.querySelector('.create-header');
+  // Apply reveals to sections and their matching elements
+  setupReveal('.why-pick-header', 'h2, p');
+  setupReveal('.why-pick-grid', '.why-pick-card', { stagger: 0.15 });
+  setupReveal('.why-pick-cta', '.btn', { stagger: 0.1 });
+
+  setupReveal('.testimonials-header', 'h2');
+  setupReveal('.testimonials-list', '.testimonial-card', { stagger: 0.15 });
+  setupReveal('.trusted-by', 'p, .trusted-logos img', { stagger: 0.05 });
+  setupReveal('.testimonials-cta', '.btn');
+
+  // Distraction section - H2 already has its own character animation
+  setupReveal('.distraction-header', '.distraction-cta');
+  setupReveal('.distraction-metrics', '.metric-item', { stagger: 0.2 });
+
+  setupReveal('.science-header', 'h2');
+  setupReveal('.blog-grid', '.blog-card', { stagger: 0.15 });
+  setupReveal('.science-cta', '.btn');
+
+  setupReveal('.faq-header', 'h2, p, .faq-contact');
+  setupReveal('.faq-content', '.accordion-item', { stagger: 0.1 });
+
+  setupReveal('.main-footer', '.footer-column, .footer-brand, .footer-bottom > *', { stagger: 0.05, start: "top 95%" });
+
+
+  // --- "WELCOME TO THE SHOW" ---
+  const createMainTitle = document.querySelector('.create-main-title');
   const firstCard = document.querySelector('.usecase-card[data-index="0"]');
-  if (createSection && createHeader && firstCard) {
-    const createH2 = createHeader.querySelector('h2');
+  if (createMainTitle && firstCard) {
     const firstCardImageWrap = firstCard.querySelector('.usecase-card__image-wrap');
-    const firstCardImage = firstCard.querySelector('.usecase-card__image');
     const firstCardContent = firstCard.querySelector('.usecase-card__content');
     const firstCardContentEls = firstCardContent ? firstCardContent.children : [];
 
-    // Wrap heading words in spans for staggered word-by-word reveal
-    if (createH2) {
-      const words = createH2.textContent.split(/\s+/);
-      createH2.innerHTML = words.map(w => `<span class="create-h2-word" style="display:inline-block">${w}</span>`).join(' ');
+    // Wrap heading words in spans for staggered word-by-word reveal if needed
+    let createWords = createMainTitle.querySelectorAll('.create-h2-word');
+    if (createWords.length === 0) {
+      const words = createMainTitle.textContent.trim().split(/\s+/);
+      createMainTitle.innerHTML = words.map(w => `<span class="create-h2-word" style="display:inline-block">${w}</span>`).join(' ');
+      createWords = createMainTitle.querySelectorAll('.create-h2-word');
     }
 
-    const createWords = createHeader.querySelectorAll('.create-h2-word');
+    const underlineTrigger = createMainTitle.querySelector('.ai-underline-trigger');
+
     gsap.set(createWords, { y: 28, opacity: 0 });
     gsap.set(firstCardImageWrap, { y: 80, scale: 0.9, opacity: 0 });
     gsap.set(firstCardContentEls, { y: 20, opacity: 0 });
@@ -216,6 +372,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ease: 'back.out(1.4)',
         overwrite: true
       });
+    }
+
+    if (underlineTrigger) {
+      welcomeTl.to(underlineTrigger, {
+        onStart: () => underlineTrigger.classList.add('ai-underline-active'),
+        duration: 0.1
+      }, "-=0.2");
     }
     welcomeTl.to(firstCardImageWrap, {
       y: 0,
@@ -233,8 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 0.5);
 
     ScrollTrigger.create({
-      trigger: createSection,
-      start: 'top 78%',
+      trigger: '#what-you-can-create',
+      start: 'top 80%',
       onEnter: () => welcomeTl.play(),
       once: true
     });
@@ -295,20 +458,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
-  // Staggered Blog Cards Reveal
-  const blogGrid = document.querySelector('.blog-grid');
-  if (blogGrid) {
-    const cards = blogGrid.querySelectorAll('.blog-card');
-    gsap.set(cards, { y: 40, opacity: 0 });
-    ScrollTrigger.create({
-      trigger: blogGrid,
-      start: 'top 80%',
-      onEnter: () => {
-        gsap.to(cards, { y: 0, opacity: 1, duration: 0.6, stagger: 0.15, ease: 'power2.out' });
-      },
-      once: true
-    });
-  }
 
   // --- INTERACTIVE ELEMENTS ---
 
@@ -369,14 +518,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Video Hover Playback
-  document.querySelectorAll('.video-thumbnail').forEach(thumb => {
-    const video = thumb.querySelector('video');
-    if (video) {
-      thumb.addEventListener('mouseenter', () => {
-        video.play().catch(err => console.log("Video interrupted:", err));
-      });
-      thumb.addEventListener('mouseleave', () => { video.pause(); });
-    }
-  });
 });
