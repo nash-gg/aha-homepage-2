@@ -1,8 +1,28 @@
 console.log("Website environment initialized successfully!");
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Using GSAP from CDN, available globally
-  gsap.registerPlugin(ScrollTrigger);
+  // --- Lazy Video Play/Pause via IntersectionObserver ---
+  const lazyVideos = document.querySelectorAll('video[loop][muted]')
+  if (lazyVideos.length > 0) {
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.play().catch(() => {})
+        } else {
+          entry.target.pause()
+        }
+      })
+    }, { threshold: 0.25 })
+
+    lazyVideos.forEach(video => videoObserver.observe(video))
+  }
+
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    console.warn('GSAP or ScrollTrigger not loaded. Animations disabled.')
+    return
+  }
+
+  gsap.registerPlugin(ScrollTrigger)
 
   // --- Hero Visuals Entrance Animation ---
   const heroBg = document.querySelector('.hero-visuals-bg');
@@ -85,40 +105,46 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    let rafScheduled = false
     const updateActiveCard = () => {
-      let activeIndex = -1;
+      let activeIndex = -1
       cards.forEach((card, i) => {
-        const rect = card.getBoundingClientRect();
-        // A card is considered "active" if it has reached its sticky position
+        const rect = card.getBoundingClientRect()
         if (rect.top <= stickyTop + 15) {
-          activeIndex = i;
+          activeIndex = i
         }
-      });
+      })
 
       cards.forEach((card, i) => {
-        // Remove all state classes first
-        card.classList.remove(activeClass, inactiveClass, 'card--past', 'card--upcoming');
+        card.classList.remove(activeClass, inactiveClass, 'card--past', 'card--upcoming')
 
         if (i === activeIndex) {
-          card.classList.add(activeClass);
+          card.classList.add(activeClass)
         } else if (i < activeIndex) {
-          card.classList.add(inactiveClass);
-          card.classList.add('card--past');
+          card.classList.add(inactiveClass)
+          card.classList.add('card--past')
         } else {
-          card.classList.add(inactiveClass);
-          card.classList.add('card--upcoming');
+          card.classList.add(inactiveClass)
+          card.classList.add('card--upcoming')
         }
 
-        // Handle dots if they exist
-        const dots = card.querySelectorAll('.card-dot');
+        const dots = card.querySelectorAll('.card-dot')
         dots.forEach((dot, di) => {
-          if (di === activeIndex) dot.classList.add('card-dot--active');
-          else dot.classList.remove('card-dot--active');
-        });
-      });
-    };
-    window.addEventListener('scroll', updateActiveCard, { passive: true });
-    updateActiveCard();
+          if (di === activeIndex) dot.classList.add('card-dot--active')
+          else dot.classList.remove('card-dot--active')
+        })
+      })
+    }
+    const onScroll = () => {
+      if (rafScheduled) return
+      rafScheduled = true
+      requestAnimationFrame(() => {
+        updateActiveCard()
+        rafScheduled = false
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    updateActiveCard()
 
     // Refresh ScrollTrigger to ensure calculations are correct after initial load
     ScrollTrigger.refresh();
@@ -129,43 +155,45 @@ document.addEventListener('DOMContentLoaded', () => {
   initStackingCards('.testimonial-card', 'testimonial-card--active', 'testimonial-card--inactive', 80, true);
 
   // --- Custom Illustration Animation for "There's more!" card ---
-  const lastUsecaseCard = document.querySelector('.usecase-card[data-index="6"]');
+  const lastUsecaseCard = document.querySelector('.usecase-card[data-index="4"]')
   if (lastUsecaseCard) {
-    const moreItems = lastUsecaseCard.querySelectorAll('.more-item');
-    const moreMain = lastUsecaseCard.querySelector('.more-main');
+    const moreItems = lastUsecaseCard.querySelectorAll('.more-item')
+    const moreMain = lastUsecaseCard.querySelector('.more-main')
 
-    // Initial setup - start slightly off-screen so the motion feels gentle
-    gsap.set(moreItems, { y: 400 });
-    gsap.set(moreMain, { y: 220 });
+    gsap.set(moreItems, { y: 400 })
+    gsap.set(moreMain, { y: 220 })
 
-    // Single continuous timeline for Rise -> Dispersal without pinning
-    const isMobile = window.innerWidth < 768;
+    const buildMoreTimeline = (opts) => {
+      const moreTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: lastUsecaseCard,
+          start: 'top bottom',
+          end: opts.end,
+          scrub: opts.scrub,
+          invalidateOnRefresh: true
+        }
+      })
 
-    const moreTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: lastUsecaseCard,
-        start: 'top bottom', // Start rising when top of card enters bottom
-        end: isMobile ? 'bottom top+=1200' : 'bottom top+=800',
-        scrub: isMobile ? 2 : 1.5, // Even more smoothing on mobile
-        invalidateOnRefresh: true
+      moreTl.to([moreItems, moreMain], {
+        y: 0,
+        stagger: 0.08,
+        duration: 1.2,
+        ease: 'power2.out'
+      })
+        .to('.item-1', { y: opts.dispersalLarge, duration: 2, ease: 'power1.out' }, 1.2)
+        .to('.item-2', { y: opts.dispersalLarge, duration: 2, ease: 'power1.out' }, 1.3)
+        .to('.item-3', { y: opts.dispersalSmall, duration: 2, ease: 'power1.out' }, 1.4)
+        .to('.item-4', { y: opts.dispersalSmall, duration: 2, ease: 'power1.out' }, 1.5)
+    }
+
+    ScrollTrigger.matchMedia({
+      '(max-width: 767px)': () => {
+        buildMoreTimeline({ end: 'bottom top+=1200', scrub: 2, dispersalLarge: -150, dispersalSmall: -120 })
+      },
+      '(min-width: 768px)': () => {
+        buildMoreTimeline({ end: 'bottom top+=800', scrub: 1.5, dispersalLarge: -280, dispersalSmall: -220 })
       }
-    });
-
-    const dispersalLarge = isMobile ? -150 : -280;
-    const dispersalSmall = isMobile ? -120 : -220;
-
-    // Rise to center
-    moreTl.to([moreItems, moreMain], {
-      y: 0,
-      stagger: 0.08,
-      duration: 1.2,
-      ease: 'power2.out'
     })
-      // Disperse with screen-size aware values
-      .to('.item-1', { y: dispersalLarge, duration: 2, ease: 'power1.out' }, 1.2)
-      .to('.item-2', { y: dispersalLarge, duration: 2, ease: 'power1.out' }, 1.3)
-      .to('.item-3', { y: dispersalSmall, duration: 2, ease: 'power1.out' }, 1.4)
-      .to('.item-4', { y: dispersalSmall, duration: 2, ease: 'power1.out' }, 1.5);
   }
 
   // --- THEME & STICKY BG TRANSITIONS ---
@@ -381,7 +409,9 @@ document.addEventListener('DOMContentLoaded', () => {
         heading.appendChild(span);
       }
     }
-    h2List.forEach(wrapCharactersInSpans);
+    h2List.forEach(wrapCharactersInSpans)
+
+    const cachedChars = Array.from(h2List).map(h2 => Array.from(h2.querySelectorAll('.distraction-h2-char')))
 
     // Reveal non-h2 children (e.g. CTA) when header enters view
     const otherChildren = [...distractionHeader.children].filter(el => el.tagName !== 'H2');
@@ -401,18 +431,17 @@ document.addEventListener('DOMContentLoaded', () => {
       start: 'bottom 80%',
       end: 'top top',
       onUpdate: (self) => {
-        const progress = self.progress;
-        h2List.forEach(h2 => {
-          const chars = h2.querySelectorAll('.distraction-h2-char');
-          const N = chars.length;
+        const progress = self.progress
+        cachedChars.forEach(chars => {
+          const N = chars.length
           chars.forEach((span, i) => {
-            const sliceStart = i / N;
-            const sliceEnd = (i + 1) / N;
-            const localProgress = (progress - sliceStart) / (sliceEnd - sliceStart);
-            const t = Math.max(0, Math.min(1, localProgress));
-            span.style.opacity = (0.3 + 0.7 * t).toFixed(4);
-          });
-        });
+            const sliceStart = i / N
+            const sliceEnd = (i + 1) / N
+            const localProgress = (progress - sliceStart) / (sliceEnd - sliceStart)
+            const t = Math.max(0, Math.min(1, localProgress))
+            span.style.opacity = (0.3 + 0.7 * t).toFixed(4)
+          })
+        })
       }
     });
 
@@ -424,8 +453,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // FAQ Accordion
   const accordionItems = [...document.querySelectorAll('.accordion-item')];
 
-  const plusPath = '<path d="M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z"></path>';
-  const minusPath = '<path d="M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z"></path>';
+  const minusPath = '<path d="M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z"></path>';
+  const plusPath = '<path d="M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z"></path>';
 
   const itemMap = accordionItems.map(item => ({
     item,
@@ -436,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateItem(target, active) {
     target.item.classList.toggle('active', active);
     if (target.icon) {
-      target.icon.innerHTML = active ? plusPath : minusPath;
+      target.icon.innerHTML = active ? minusPath : plusPath
     }
   }
 
