@@ -857,7 +857,6 @@ p {
 .why-pick-card .card-media {
   position: absolute;
   inset: 0;
-  z-index: -2;
 }
 
 .why-pick-card .card-media .feature-img {
@@ -882,6 +881,7 @@ p {
 
 .card-text {
   max-width: 100%;
+  position: relative;
 }
 
 .card-text h3 {
