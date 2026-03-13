@@ -1,6 +1,33 @@
 console.log("Website environment initialized successfully!");
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Topbar Access Code ---
+  const topbarBtn = document.querySelector('.topbar-btn')
+  const topbarInput = document.querySelector('.topbar-input')
+  if (topbarBtn && topbarInput) {
+    const handleJoin = () => {
+      const val = topbarInput.value.replace(/\s/g, '')
+      if (!val) return
+
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: 'GoogleAnalyticsEvent',
+        eventCategory: 'Landing Site',
+        eventAction: 'Header > Join Presentation > User joins a presentation by typing in the access code ' + val
+      })
+
+      window.location.href = 'https://audience.ahaslides.com/' + val
+    }
+
+    topbarBtn.addEventListener('click', handleJoin)
+    topbarInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        handleJoin()
+      }
+    })
+  }
+
   // --- Header Show/Hide on Scroll ---
   const headerEl = document.querySelector('.header.navbar-2')
   if (headerEl) {
