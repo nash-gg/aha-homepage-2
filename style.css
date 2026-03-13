@@ -1340,7 +1340,7 @@ p {
 .testimonial-text blockquote {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
   line-height: 1.25;
   position: relative;
   z-index: 1;
@@ -1372,29 +1372,13 @@ p {
 
 .user-name {
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
   font-size: 0.95rem;
 }
 
 .user-title {
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.85rem;
-}
-
-.brand-logo {
-  display: flex;
-  align-items: center;
-  opacity: 1;
-  padding: 0;
-  width: auto;
-  /* Logos in cards should be full color */
-}
-
-.brand-logo-img {
-  height: 50px;
-  width: 120px;
-  object-fit: contain;
-  display: block;
 }
 
 .testimonial-image {
@@ -1771,11 +1755,6 @@ p {
 
   .author-brand-wrap {
     gap: 0;
-  }
-
-  .brand-logo img {
-    height: 40px;
-    width: 100px;
   }
 }
 
