@@ -1,6 +1,46 @@
 console.log("Website environment initialized successfully!");
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Header Show/Hide on Scroll ---
+  const headerEl = document.querySelector('.header.navbar-2')
+  if (headerEl) {
+    const SCROLL_THRESHOLD = 170
+    let lastScrollY = window.scrollY
+    let ticking = false
+    let hasPassedThreshold = false
+
+    headerEl.classList.add('header--top')
+
+    const onHeaderScroll = () => {
+      const currentY = window.scrollY
+      const scrollingUp = currentY < lastScrollY
+
+      if (currentY <= SCROLL_THRESHOLD) {
+        headerEl.classList.remove('header--hidden')
+        headerEl.classList.add('header--top')
+        hasPassedThreshold = false
+      } else if (!hasPassedThreshold) {
+        headerEl.classList.add('header--hidden')
+        headerEl.classList.remove('header--top')
+        hasPassedThreshold = true
+      } else if (scrollingUp) {
+        headerEl.classList.remove('header--hidden')
+      } else {
+        headerEl.classList.add('header--hidden')
+      }
+
+      lastScrollY = currentY
+      ticking = false
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(onHeaderScroll)
+      }
+    }, { passive: true })
+  }
+
   // --- Lazy Video Play/Pause via IntersectionObserver ---
   const lazyVideos = document.querySelectorAll('video[loop][muted]')
   if (lazyVideos.length > 0) {
