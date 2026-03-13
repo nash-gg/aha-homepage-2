@@ -469,18 +469,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   itemMap.forEach(target => {
-    if (!target.header) return;
+    updateItem(target, target.item.classList.contains('active'))
+
+    if (!target.header) return
 
     target.header.addEventListener('click', () => {
-      const willOpen = !target.item.classList.contains('active');
+      const willOpen = !target.item.classList.contains('active')
 
-      itemMap.forEach(entry => updateItem(entry, false));
+      itemMap.forEach(entry => updateItem(entry, false))
 
       if (willOpen) {
-        updateItem(target, true);
+        updateItem(target, true)
       }
-    });
-  });
+    })
+  })
 
   // Metric Counting
   const metrics = document.querySelectorAll('.metric-number');
