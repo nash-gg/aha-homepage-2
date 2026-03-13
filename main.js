@@ -9,19 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let ticking = false
     let hasPassedThreshold = false
 
-    headerEl.classList.add('header--top')
-
     const onHeaderScroll = () => {
       const currentY = window.scrollY
       const scrollingUp = currentY < lastScrollY
 
       if (currentY <= SCROLL_THRESHOLD) {
         headerEl.classList.remove('header--hidden')
-        headerEl.classList.add('header--top')
         hasPassedThreshold = false
       } else if (!hasPassedThreshold) {
         headerEl.classList.add('header--hidden')
-        headerEl.classList.remove('header--top')
         hasPassedThreshold = true
       } else if (scrollingUp) {
         headerEl.classList.remove('header--hidden')

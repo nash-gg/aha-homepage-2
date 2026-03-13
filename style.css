@@ -91,11 +91,6 @@ p {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
-.header.navbar-2.header--top {
-  background-color: var(--theme-bg);
-  border-bottom-color: var(--theme-bg);
-}
-
 .header.navbar-2.header--hidden {
   transform: translateY(-100%);
 }
@@ -169,7 +164,7 @@ p {
   /* Use theme variable so JS transitions can affect the hero like other sections */
   background: var(--theme-bg);
   overflow: hidden;
-  padding: 6rem 1rem 6rem 1rem;
+  padding: 3rem 2rem 6rem 2rem;
   gap: 64px;
   position: relative;
   z-index: 2;
