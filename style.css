@@ -150,7 +150,7 @@ p {
   flex-direction: column;
   /* Removed padding-top as header is not fixed anymore */
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   /* Use theme variable so JS transitions can affect the hero like other sections */
   background: var(--theme-bg);
@@ -160,6 +160,7 @@ p {
   position: relative;
   z-index: 2;
   /* For floating elements */
+  min-height: calc(100vh - 140px);
 }
 
 .hero-container {
