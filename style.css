@@ -1298,19 +1298,19 @@ p {
 }
 
 .testimonial-card:first-child {
-  background-color: #E9DFFF;
+  background-color: #FF4081;
 }
 
 .testimonial-card:nth-child(2) {
-  background-color: #FFE8D9;
+  background-color: #6A1EBB;
 }
 
 .testimonial-card:nth-child(3) {
-  background-color: #D9F7E9;
+  background-color: #FF4081;
 }
 
 .testimonial-card:nth-child(4) {
-  background-color: #FFDFE9;
+  background-color: #6A1EBB;
 }
 
 
