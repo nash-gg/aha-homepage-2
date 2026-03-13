@@ -1,12 +1,38 @@
-console.log("Website environment initialized successfully!");
+;(function () {
+  'use strict'
 
-document.addEventListener('DOMContentLoaded', () => {
-  // --- Topbar Access Code ---
-  const topbarBtn = document.querySelector('.topbar-btn')
-  const topbarInput = document.querySelector('.topbar-input')
-  if (topbarBtn && topbarInput) {
+  // ============================================================
+  // UTILITIES
+  // ============================================================
+
+  function onReady(fn) {
+    if (document.readyState !== 'loading') fn()
+    else document.addEventListener('DOMContentLoaded', fn)
+  }
+
+  function rafThrottle(fn) {
+    let scheduled = false
+    return function () {
+      if (scheduled) return
+      scheduled = true
+      requestAnimationFrame(() => {
+        fn()
+        scheduled = false
+      })
+    }
+  }
+
+  // ============================================================
+  // TOPBAR ACCESS CODE
+  // ============================================================
+
+  function initTopbarForm() {
+    const btn = document.querySelector('.topbar-btn')
+    const input = document.querySelector('.topbar-input')
+    if (!btn || !input) return
+
     const handleJoin = () => {
-      const val = topbarInput.value.replace(/\s/g, '')
+      const val = input.value.replace(/\s/g, '')
       if (!val) return
 
       window.dataLayer = window.dataLayer || []
@@ -19,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'https://audience.ahaslides.com/' + val
     }
 
-    topbarBtn.addEventListener('click', handleJoin)
-    topbarInput.addEventListener('keydown', (e) => {
+    btn.addEventListener('click', handleJoin)
+    input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault()
         handleJoin()
@@ -28,131 +54,116 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  // --- Header Show/Hide on Scroll ---
-  const headerEl = document.querySelector('.header.navbar-2')
-  if (headerEl) {
-    const SCROLL_THRESHOLD = 170
-    let lastScrollY = window.scrollY
-    let ticking = false
-    let hasPassedThreshold = false
+  // ============================================================
+  // HEADER SHOW / HIDE
+  // ============================================================
 
-    const onHeaderScroll = () => {
-      const currentY = window.scrollY
-      const scrollingUp = currentY < lastScrollY
+  function initHeaderScroll() {
+    const header = document.querySelector('.header.navbar-2')
+    if (!header) return
 
-      if (currentY <= SCROLL_THRESHOLD) {
-        headerEl.classList.remove('header--hidden')
-        hasPassedThreshold = false
-      } else if (!hasPassedThreshold) {
-        headerEl.classList.add('header--hidden')
-        hasPassedThreshold = true
-      } else if (scrollingUp) {
-        headerEl.classList.remove('header--hidden')
+    const THRESHOLD = 170
+    let lastY = window.scrollY
+    let passed = false
+
+    const update = () => {
+      const y = window.scrollY
+      const up = y < lastY
+
+      if (y <= THRESHOLD) {
+        header.classList.remove('header--hidden')
+        passed = false
+      } else if (!passed) {
+        header.classList.add('header--hidden')
+        passed = true
+      } else if (up) {
+        header.classList.remove('header--hidden')
       } else {
-        headerEl.classList.add('header--hidden')
+        header.classList.add('header--hidden')
       }
 
-      lastScrollY = currentY
-      ticking = false
+      lastY = y
     }
 
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        ticking = true
-        requestAnimationFrame(onHeaderScroll)
-      }
-    }, { passive: true })
+    window.addEventListener('scroll', rafThrottle(update), { passive: true })
   }
 
-  // --- Lazy Video Play/Pause via IntersectionObserver ---
-  const lazyVideos = document.querySelectorAll('video[loop][muted]')
-  if (lazyVideos.length > 0) {
-    const videoObserver = new IntersectionObserver((entries) => {
+  // ============================================================
+  // LAZY VIDEO (IntersectionObserver)
+  // ============================================================
+
+  function initLazyVideos() {
+    const videos = document.querySelectorAll('video[loop][muted]')
+    if (!videos.length) return
+
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.play().catch(() => {})
-        } else {
-          entry.target.pause()
-        }
+        if (entry.isIntersecting) entry.target.play().catch(() => {})
+        else entry.target.pause()
       })
     }, { threshold: 0.25 })
 
-    lazyVideos.forEach(video => videoObserver.observe(video))
+    videos.forEach(v => observer.observe(v))
   }
 
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-    console.warn('GSAP or ScrollTrigger not loaded. Animations disabled.')
-    return
-  }
+  // ============================================================
+  // GSAP — guard & register
+  // ============================================================
 
-  gsap.registerPlugin(ScrollTrigger)
-
-  // --- Hero Visuals Entrance Animation ---
-  const heroBg = document.querySelector('.hero-visuals-bg');
-  const speaker = document.querySelector('.visual-item.speaker');
-  const floatingItems = document.querySelectorAll('.visual-item.floating');
-
-  if (heroBg || speaker || floatingItems.length > 0) {
-    const tl = gsap.timeline({ delay: 0.1 });
-
-    // 1. BG Entrance
-    if (heroBg) {
-      tl.fromTo(heroBg,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.5, ease: "power2.out" }
-      );
+  function gsapAvailable() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      console.warn('GSAP or ScrollTrigger not loaded. Animations disabled.')
+      return false
     }
+    gsap.registerPlugin(ScrollTrigger)
+    return true
+  }
 
-    // 2. Speaker Entrance
+  // ============================================================
+  // HERO ENTRANCE
+  // ============================================================
+
+  function initHeroEntrance() {
+    const bg = document.querySelector('.hero-visuals-bg')
+    const speaker = document.querySelector('.visual-item.speaker')
+    const floats = document.querySelectorAll('.visual-item.floating')
+    if (!bg && !speaker && !floats.length) return
+
+    const tl = gsap.timeline({ delay: 0.1 })
+
+    if (bg) {
+      tl.fromTo(bg, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' })
+    }
     if (speaker) {
-      tl.fromTo(speaker,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.5,
-          ease: "power2.out"
-        },
-        "-=0.2"
-      );
+      tl.fromTo(speaker, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
     }
-
-    // 3. Floating Elements Entrance (Staggered)
-    if (floatingItems.length > 0) {
-      tl.fromTo(floatingItems,
+    if (floats.length) {
+      tl.fromTo(floats,
         { opacity: 0, scale: 0.95 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.5,
-          stagger: 0.1,
-          ease: "back.out(1.2)"
-        },
-        "-=0.2"
-      );
+        { opacity: 1, scale: 1, duration: 0.5, stagger: 0.1, ease: 'back.out(1.2)' },
+        '-=0.2'
+      )
     }
   }
 
-  // --- Logo Scale Animation ---
+  // ============================================================
+  // STICKY STACKING CARDS
+  // ============================================================
 
-
-
-  // Sticky Stacking Cards Logic
-  const initStackingCards = (cardSelector, activeClass, inactiveClass, stickyTop, immediateTransition = false) => {
-    const cards = document.querySelectorAll(cardSelector);
-    if (cards.length === 0) return;
+  function initStackingCards(cardSelector, activeClass, inactiveClass, stickyTop, immediateTransition) {
+    const cards = document.querySelectorAll(cardSelector)
+    if (!cards.length) return
 
     cards.forEach((card, i) => {
-      card.style.zIndex = i + 1;
+      card.style.zIndex = i + 1
 
-      // Use ScrollTrigger to smoothly scale down the "past" card
-      // as the "upcoming" card approaches its sticky position.
       if (i < cards.length - 1) {
-        const nextCard = cards[i + 1];
-        const cardHeight = card.offsetHeight;
-
-        // Use the current card as trigger if immediateTransition is true
-        const triggerEl = immediateTransition ? card : nextCard;
-        const startPoint = immediateTransition ? `top ${stickyTop}px` : `top ${stickyTop + (cardHeight * 0.5)}px`;
+        const nextCard = cards[i + 1]
+        const cardHeight = card.offsetHeight
+        const triggerEl = immediateTransition ? card : nextCard
+        const startPoint = immediateTransition
+          ? `top ${stickyTop}px`
+          : `top ${stickyTop + cardHeight * 0.5}px`
 
         gsap.to(card, {
           scale: 0.8,
@@ -164,18 +175,14 @@ document.addEventListener('DOMContentLoaded', () => {
             end: `top ${stickyTop}px`,
             scrub: true
           }
-        });
+        })
       }
-    });
+    })
 
-    let rafScheduled = false
-    const updateActiveCard = () => {
+    const updateActive = () => {
       let activeIndex = -1
       cards.forEach((card, i) => {
-        const rect = card.getBoundingClientRect()
-        if (rect.top <= stickyTop + 15) {
-          activeIndex = i
-        }
+        if (card.getBoundingClientRect().top <= stickyTop + 15) activeIndex = i
       })
 
       cards.forEach((card, i) => {
@@ -184,406 +191,343 @@ document.addEventListener('DOMContentLoaded', () => {
         if (i === activeIndex) {
           card.classList.add(activeClass)
         } else if (i < activeIndex) {
-          card.classList.add(inactiveClass)
-          card.classList.add('card--past')
+          card.classList.add(inactiveClass, 'card--past')
         } else {
-          card.classList.add(inactiveClass)
-          card.classList.add('card--upcoming')
+          card.classList.add(inactiveClass, 'card--upcoming')
         }
 
-        const dots = card.querySelectorAll('.card-dot')
-        dots.forEach((dot, di) => {
-          if (di === activeIndex) dot.classList.add('card-dot--active')
-          else dot.classList.remove('card-dot--active')
+        card.querySelectorAll('.card-dot').forEach((dot, di) => {
+          dot.classList.toggle('card-dot--active', di === activeIndex)
         })
       })
     }
-    const onScroll = () => {
-      if (rafScheduled) return
-      rafScheduled = true
-      requestAnimationFrame(() => {
-        updateActiveCard()
-        rafScheduled = false
-      })
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    updateActiveCard()
 
-    // Refresh ScrollTrigger to ensure calculations are correct after initial load
-    ScrollTrigger.refresh();
-  };
+    window.addEventListener('scroll', rafThrottle(updateActive), { passive: true })
+    updateActive()
+    ScrollTrigger.refresh()
+  }
 
-  // Use 64 for 4rem (16px * 4) and 80 for 5rem (16px * 5)
-  initStackingCards('.usecase-card', 'usecase-card--active', 'usecase-card--inactive', 64, true);
-  initStackingCards('.testimonial-card', 'testimonial-card--active', 'testimonial-card--inactive', 80, true);
+  // ============================================================
+  // "THERE'S MORE!" CARD ILLUSTRATION
+  // ============================================================
 
-  // --- Custom Illustration Animation for "There's more!" card ---
-  const lastUsecaseCard = document.querySelector('.usecase-card[data-index="4"]')
-  if (lastUsecaseCard) {
-    const moreItems = lastUsecaseCard.querySelectorAll('.more-item')
-    const moreMain = lastUsecaseCard.querySelector('.more-main')
+  function initMoreCardAnimation() {
+    const card = document.querySelector('.usecase-card[data-index="4"]')
+    if (!card) return
 
-    const buildMoreTimeline = (opts) => {
-      gsap.set(moreItems, { y: 400 })
-      gsap.set(moreMain, { y: 220 })
+    const items = card.querySelectorAll('.more-item')
+    const main = card.querySelector('.more-main')
 
-      const moreTl = gsap.timeline({
+    const build = (opts) => {
+      gsap.set(items, { y: 400 })
+      gsap.set(main, { y: 220 })
+
+      gsap.timeline({
         scrollTrigger: {
-          trigger: lastUsecaseCard,
+          trigger: card,
           start: 'top bottom',
           end: opts.end,
           scrub: opts.scrub,
           invalidateOnRefresh: true
         }
       })
-
-      moreTl.to([moreItems, moreMain], {
-        y: 0,
-        stagger: 0.08,
-        duration: 1.2,
-        ease: 'power2.out'
-      })
-        .to('.item-1', { y: opts.dispersalLarge, duration: 2, ease: 'power1.out' }, 1.2)
-        .to('.item-2', { y: opts.dispersalLarge, duration: 2, ease: 'power1.out' }, 1.3)
-        .to('.item-3', { y: opts.dispersalSmall, duration: 2, ease: 'power1.out' }, 1.4)
-        .to('.item-4', { y: opts.dispersalSmall, duration: 2, ease: 'power1.out' }, 1.5)
+        .to([items, main], { y: 0, stagger: 0.08, duration: 1.2, ease: 'power2.out' })
+        .to('.item-1', { y: opts.dispersalLg, duration: 2, ease: 'power1.out' }, 1.2)
+        .to('.item-2', { y: opts.dispersalLg, duration: 2, ease: 'power1.out' }, 1.3)
+        .to('.item-3', { y: opts.dispersalSm, duration: 2, ease: 'power1.out' }, 1.4)
+        .to('.item-4', { y: opts.dispersalSm, duration: 2, ease: 'power1.out' }, 1.5)
     }
 
     const mm = gsap.matchMedia()
     mm.add('(max-width: 767px)', () => {
-      buildMoreTimeline({ end: 'bottom top+=1200', scrub: 2, dispersalLarge: -150, dispersalSmall: -120 })
+      build({ end: 'bottom top+=1200', scrub: 2, dispersalLg: -150, dispersalSm: -120 })
     })
     mm.add('(min-width: 768px)', () => {
-      buildMoreTimeline({ end: 'bottom top+=800', scrub: 1.5, dispersalLarge: -280, dispersalSmall: -220 })
+      build({ end: 'bottom top+=800', scrub: 1.5, dispersalLg: -280, dispersalSm: -220 })
     })
   }
 
-  // --- THEME & STICKY BG TRANSITIONS ---
-  const root = document.documentElement;
+  // ============================================================
+  // THEME TRANSITIONS (CSS custom properties)
+  // ============================================================
 
-  // Zone 0: Hero -> Create
-  const trigger0 = document.querySelector('.gradient-transition-hero');
-  if (trigger0) {
-    gsap.to(root, {
-      '--theme-bg': '#1a1a2e',
-      '--theme-text': '#ffffff',
-      ease: 'none',
-      scrollTrigger: { trigger: trigger0, start: 'bottom 95%', end: 'top top', scrub: 1 }
-    });
-  }
+  function initThemeTransitions() {
+    const root = document.documentElement
 
-  // Zone 1: Create -> Why Pick
-  const trigger1 = document.querySelector('.gradient-transition-what-you-can-create');
-  if (trigger1) {
-    gsap.to(root, {
-      '--theme-1-bg': '#F4F8FF',
-      '--theme-1-gradient-start': '#F4F8FF',
-      '--theme-text': '#1a1a2e',
-      '--theme-text-secondary': '#475569',
-      '--theme-card-text': '#1a1a2e',
-      '--theme-card-desc': '#64748b',
-      '--theme-icon': '#64748b',
-      '--theme-cta-bg': '#6d28d9',
-      '--theme-cta-text': '#ffffff',
-      ease: 'none',
-      scrollTrigger: { trigger: trigger1, start: 'center 80%', end: 'center 20%', scrub: 1 }
-    });
-  }
-
-  // Zone 2: Why Pick -> Testimonials
-  const trigger2 = document.querySelector('.gradient-transition-why-pick');
-  if (trigger2) {
-    gsap.to(root, {
-      '--theme-2-bg': '#FFF',
-      '--theme-2-gradient-start': '#FFF',
-      ease: 'none',
-      scrollTrigger: { trigger: trigger2, start: 'center 80%', end: 'center 20%', scrub: 1 }
-    });
-  }
-
-  // Zone 3: Testimonials -> Distraction
-  const trigger3 = document.querySelector('.gradient-transition-testimonials');
-  if (trigger3) {
-    gsap.to(root, {
-      '--theme-3-bg': '#FFE3E9',
-      '--theme-3-gradient-start': '#FFE3E9',
-      ease: 'none',
-      scrollTrigger: { trigger: trigger3, start: 'center 80%', end: 'center 20%', scrub: 1 }
-    });
-  }
-
-  // Zone 4: Science/Blog -> FAQ
-  const trigger4 = document.querySelector('.gradient-transition-blog');
-  if (trigger4) {
-    gsap.to(root, {
-      '--theme-4-bg': '#FFFFFF',
-      '--theme-4-gradient-start': '#FFFFFF',
-      ease: 'none',
-      scrollTrigger: { trigger: trigger4, start: 'center 80%', end: 'center 20%', scrub: 1 }
-    });
-  }
-
-
-
-
-
-  // --- UNIFIED REVEAL ANIMATIONS (from "Why pick" to end of page) ---
-  const revealConfig = {
-    y: 30,
-    opacity: 0,
-    duration: 0.5,
-    ease: "power2.out",
-    stagger: 0.1,
-    start: "top 85%"
-  };
-
-  const setupReveal = (trigger, elements, customConfig = {}) => {
-    const triggerEl = document.querySelector(trigger);
-    if (!triggerEl) return;
-
-    const config = { ...revealConfig, ...customConfig };
-    const els = elements ? triggerEl.querySelectorAll(elements) : [triggerEl];
-
-    if (els.length === 0) return;
-
-    // Set initial state
-    gsap.set(els, { y: config.y, opacity: 0 });
-
-    ScrollTrigger.create({
-      trigger: triggerEl,
-      start: config.start,
-      onEnter: () => {
-        gsap.to(els, {
-          y: 0,
-          opacity: 1,
-          duration: config.duration,
-          stagger: config.stagger,
-          ease: config.ease,
-          overwrite: 'auto'
-        });
+    const zones = [
+      {
+        trigger: '.gradient-transition-hero',
+        vars: { '--theme-bg': '#1a1a2e', '--theme-text': '#ffffff' },
+        start: 'bottom 95%', end: 'top top'
       },
-      once: true
-    });
-  };
+      {
+        trigger: '.gradient-transition-what-you-can-create',
+        vars: {
+          '--theme-1-bg': '#F4F8FF', '--theme-1-gradient-start': '#F4F8FF',
+          '--theme-text': '#1a1a2e', '--theme-text-secondary': '#475569',
+          '--theme-card-text': '#1a1a2e', '--theme-card-desc': '#64748b',
+          '--theme-icon': '#64748b', '--theme-cta-bg': '#6d28d9', '--theme-cta-text': '#ffffff'
+        },
+        start: 'center 80%', end: 'center 20%'
+      },
+      {
+        trigger: '.gradient-transition-why-pick',
+        vars: { '--theme-2-bg': '#FFF', '--theme-2-gradient-start': '#FFF' },
+        start: 'center 80%', end: 'center 20%'
+      },
+      {
+        trigger: '.gradient-transition-testimonials',
+        vars: { '--theme-3-bg': '#FFE3E9', '--theme-3-gradient-start': '#FFE3E9' },
+        start: 'center 80%', end: 'center 20%'
+      },
+      {
+        trigger: '.gradient-transition-blog',
+        vars: { '--theme-4-bg': '#FFFFFF', '--theme-4-gradient-start': '#FFFFFF' },
+        start: 'center 80%', end: 'center 20%'
+      }
+    ]
 
-  // Apply reveals to sections and their matching elements
-  setupReveal('.why-pick-header', 'h2, p');
-  setupReveal('.why-pick-grid', '.why-pick-card', { stagger: 0.15 });
-  setupReveal('.why-pick-cta', '.btn', { stagger: 0.1 });
+    zones.forEach(({ trigger, vars, start, end }) => {
+      const el = document.querySelector(trigger)
+      if (!el) return
+      gsap.to(root, { ...vars, ease: 'none', scrollTrigger: { trigger: el, start, end, scrub: 1 } })
+    })
+  }
 
-  setupReveal('.testimonials-header', 'h2');
-  setupReveal('.testimonials-list', '.testimonial-card', { stagger: 0.15 });
-  setupReveal('.trusted-by', 'p, .trusted-logos img', { stagger: 0.05 });
-  setupReveal('.testimonials-cta', '.btn');
+  // ============================================================
+  // SCROLL-REVEAL ANIMATIONS
+  // ============================================================
 
-  // Distraction section - H2 already has its own character animation
-  setupReveal('.distraction-header', '.distraction-cta');
-  setupReveal('.distraction-metrics', '.metric-item', { stagger: 0.2 });
+  function initRevealAnimations() {
+    const defaults = { y: 30, opacity: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1, start: 'top 85%' }
 
-  setupReveal('.science-header', 'h2');
-  setupReveal('.blog-grid', '.blog-card', { stagger: 0.15 });
-  setupReveal('.science-cta', '.btn');
+    const reveal = (trigger, elements, custom) => {
+      const triggerEl = document.querySelector(trigger)
+      if (!triggerEl) return
 
-  setupReveal('.faq-header', 'h2, p, .faq-contact');
-  setupReveal('.faq-content', '.accordion-item', { stagger: 0.1 });
+      const cfg = { ...defaults, ...custom }
+      const els = elements ? triggerEl.querySelectorAll(elements) : [triggerEl]
+      if (!els.length) return
 
-  setupReveal('.main-footer', '.footer-column, .footer-brand, .footer-bottom > *', { stagger: 0.05, start: "top 95%" });
-
-
-  // --- "WELCOME TO THE SHOW" ---
-  const createMainTitle = document.querySelector('.create-main-title');
-  const firstCard = document.querySelector('.usecase-card[data-index="0"]');
-  if (createMainTitle && firstCard) {
-    const firstCardImageWrap = firstCard.querySelector('.usecase-card__image-wrap');
-    const firstCardContent = firstCard.querySelector('.usecase-card__content');
-    const firstCardContentEls = firstCardContent ? firstCardContent.children : [];
-
-    // Wrap heading words in spans for staggered word-by-word reveal if needed
-    let createWords = createMainTitle.querySelectorAll('.create-h2-word');
-    if (createWords.length === 0) {
-      const words = createMainTitle.textContent.trim().split(/\s+/);
-      createMainTitle.innerHTML = words.map(w => `<span class="create-h2-word" style="display:inline-block">${w}</span>`).join(' ');
-      createWords = createMainTitle.querySelectorAll('.create-h2-word');
+      gsap.set(els, { y: cfg.y, opacity: 0 })
+      ScrollTrigger.create({
+        trigger: triggerEl,
+        start: cfg.start,
+        onEnter: () => {
+          gsap.to(els, { y: 0, opacity: 1, duration: cfg.duration, stagger: cfg.stagger, ease: cfg.ease, overwrite: 'auto' })
+        },
+        once: true
+      })
     }
 
-    const underlineTrigger = createMainTitle.parentElement.querySelector('.ai-underline-trigger')
+    reveal('.why-pick-header', 'h2, p')
+    reveal('.why-pick-grid', '.why-pick-card', { stagger: 0.15 })
+    reveal('.why-pick-cta', '.btn', { stagger: 0.1 })
+    reveal('.testimonials-header', 'h2')
+    reveal('.testimonials-list', '.testimonial-card', { stagger: 0.15 })
+    reveal('.trusted-by', 'p, .trusted-logos img', { stagger: 0.05 })
+    reveal('.testimonials-cta', '.btn')
+    reveal('.distraction-header', '.distraction-cta')
+    reveal('.distraction-metrics', '.metric-item', { stagger: 0.2 })
+    reveal('.science-header', 'h2')
+    reveal('.blog-grid', '.blog-card', { stagger: 0.15 })
+    reveal('.science-cta', '.btn')
+    reveal('.faq-header', 'h2, p, .faq-contact')
+    reveal('.faq-content', '.accordion-item', { stagger: 0.1 })
+    reveal('.main-footer', '.footer-column, .footer-brand, .footer-bottom > *', { stagger: 0.05, start: 'top 95%' })
+  }
 
-    gsap.set(createWords, { y: 28, opacity: 0 });
-    gsap.set(firstCardImageWrap, { y: 80, scale: 0.9, opacity: 0 });
-    gsap.set(firstCardContentEls, { y: 20, opacity: 0 });
+  // ============================================================
+  // "WELCOME TO THE SHOW" — Create section entrance
+  // ============================================================
 
-    const welcomeTl = gsap.timeline({ paused: true });
-    if (createWords?.length) {
-      welcomeTl.to(createWords, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        stagger: 0.06,
-        ease: 'back.out(1.4)',
-        overwrite: true
-      });
+  function initCreateSectionEntrance() {
+    const title = document.querySelector('.create-main-title')
+    const firstCard = document.querySelector('.usecase-card[data-index="0"]')
+    if (!title || !firstCard) return
+
+    const imageWrap = firstCard.querySelector('.usecase-card__image-wrap')
+    const contentEls = firstCard.querySelector('.usecase-card__content')?.children || []
+
+    let words = title.querySelectorAll('.create-h2-word')
+    if (!words.length) {
+      title.innerHTML = title.textContent.trim().split(/\s+/)
+        .map(w => `<span class="create-h2-word" style="display:inline-block">${w}</span>`)
+        .join(' ')
+      words = title.querySelectorAll('.create-h2-word')
     }
 
-    if (underlineTrigger) {
-      welcomeTl.to(underlineTrigger, {
-        onStart: () => underlineTrigger.classList.add('ai-underline-active'),
-        duration: 0.1
-      }, "-=0.2");
+    const underline = title.parentElement.querySelector('.ai-underline-trigger')
+
+    gsap.set(words, { y: 28, opacity: 0 })
+    gsap.set(imageWrap, { y: 80, scale: 0.9, opacity: 0 })
+    gsap.set(contentEls, { y: 20, opacity: 0 })
+
+    const tl = gsap.timeline({ paused: true })
+
+    if (words.length) {
+      tl.to(words, { y: 0, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'back.out(1.4)', overwrite: true })
     }
-    welcomeTl.to(firstCardImageWrap, {
-      y: 0,
-      scale: 1,
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power3.out'
-    }, 0.2);
-    welcomeTl.to(firstCardContentEls, {
-      y: 0,
-      opacity: 1,
-      duration: 0.5,
-      stagger: 0.08,
-      ease: 'power2.out'
-    }, 0.5);
+    if (underline) {
+      tl.to(underline, { onStart: () => underline.classList.add('ai-underline-active'), duration: 0.1 }, '-=0.2')
+    }
+    tl.to(imageWrap, { y: 0, scale: 1, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0.2)
+    tl.to(contentEls, { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, 0.5)
 
     ScrollTrigger.create({
       trigger: '#what-you-can-create',
       start: 'top 80%',
-      onEnter: () => welcomeTl.play(),
+      onEnter: () => tl.play(),
       once: true
-    });
+    })
   }
 
-  // --- DISTRACTION HEADER: scroll-driven per-character opacity ---
-  const distractionHeader = document.querySelector('.distraction-header');
-  if (distractionHeader) {
-    const section = distractionHeader.closest('.distraction-section');
-    const h2List = distractionHeader.querySelectorAll('h2');
+  // ============================================================
+  // DISTRACTION HEADER — per-character scroll opacity
+  // ============================================================
 
-    // Wrap each character in a span so we can animate opacity per character (works for any text length/content)
-    function wrapCharactersInSpans(heading) {
-      const text = heading.textContent;
-      heading.textContent = '';
+  function initDistractionHeader() {
+    const header = document.querySelector('.distraction-header')
+    if (!header) return
+
+    const section = header.closest('.distraction-section')
+    const headings = header.querySelectorAll('h2')
+
+    headings.forEach(h2 => {
+      const text = h2.textContent
+      h2.textContent = ''
       for (const char of text) {
-        const span = document.createElement('span');
-        span.className = 'distraction-h2-char';
-        span.textContent = char;
-        span.style.opacity = '0.3';
-        heading.appendChild(span);
+        const span = document.createElement('span')
+        span.className = 'distraction-h2-char'
+        span.textContent = char
+        span.style.opacity = '0.3'
+        h2.appendChild(span)
       }
-    }
-    h2List.forEach(wrapCharactersInSpans)
+    })
 
-    const cachedChars = Array.from(h2List).map(h2 => Array.from(h2.querySelectorAll('.distraction-h2-char')))
+    const charGroups = Array.from(headings).map(h2 =>
+      Array.from(h2.querySelectorAll('.distraction-h2-char'))
+    )
 
-    // Reveal non-h2 children (e.g. CTA) when header enters view
-    const otherChildren = [...distractionHeader.children].filter(el => el.tagName !== 'H2');
-    gsap.set(otherChildren, { y: 30, opacity: 0 });
+    const others = [...header.children].filter(el => el.tagName !== 'H2')
+    gsap.set(others, { y: 30, opacity: 0 })
     ScrollTrigger.create({
-      trigger: distractionHeader,
+      trigger: header,
       start: 'top 85%',
-      onEnter: () => {
-        gsap.to(otherChildren, { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' });
-      },
+      onEnter: () => gsap.to(others, { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' }),
       once: true
-    });
+    })
 
-    // Scroll-driven opacity: progress 0 when section bottom at 20% from bottom, 1 when section top at top
     ScrollTrigger.create({
-      trigger: section || distractionHeader,
+      trigger: section || header,
       start: 'bottom 80%',
       end: 'top top',
       onUpdate: (self) => {
         const progress = self.progress
-        cachedChars.forEach(chars => {
+        charGroups.forEach(chars => {
           const N = chars.length
           chars.forEach((span, i) => {
-            const sliceStart = i / N
-            const sliceEnd = (i + 1) / N
-            const localProgress = (progress - sliceStart) / (sliceEnd - sliceStart)
-            const t = Math.max(0, Math.min(1, localProgress))
+            const t = Math.max(0, Math.min(1, (progress - i / N) / (1 / N)))
             span.style.opacity = (0.3 + 0.7 * t).toFixed(4)
           })
         })
       }
-    });
-
+    })
   }
 
+  // ============================================================
+  // FAQ ACCORDION
+  // ============================================================
 
-  // --- INTERACTIVE ELEMENTS ---
+  function initAccordion() {
+    const items = [...document.querySelectorAll('.accordion-item')]
+    if (!items.length) return
 
-  // FAQ Accordion
-  const accordionItems = [...document.querySelectorAll('.accordion-item')];
+    const MINUS = '<path d="M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z"></path>'
+    const PLUS = '<path d="M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z"></path>'
+    const SWAP_DELAY = 200
 
-  const minusPath = '<path d="M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z"></path>';
-  const plusPath = '<path d="M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z"></path>';
+    const entries = items.map(item => ({
+      item,
+      header: item.querySelector('.accordion-header'),
+      icon: item.querySelector('.accordion-icon')
+    }))
 
-  const itemMap = accordionItems.map(item => ({
-    item,
-    header: item.querySelector('.accordion-header'),
-    icon: item.querySelector('.accordion-icon')
-  }));
+    function setItem(entry, active, animate) {
+      const was = entry.item.classList.contains('active')
+      entry.item.classList.toggle('active', active)
+      if (!entry.icon) return
 
-  const ICON_SWAP_DELAY = 200
-
-  function setIconPath(icon, path) {
-    if (icon) icon.innerHTML = path
-  }
-
-  function updateItem(target, active, animate) {
-    const wasActive = target.item.classList.contains('active')
-    target.item.classList.toggle('active', active)
-
-    if (!target.icon) return
-
-    if (!animate || wasActive === active) {
-      setIconPath(target.icon, active ? minusPath : plusPath)
-      return
+      const path = active ? MINUS : PLUS
+      if (!animate || was === active) {
+        entry.icon.innerHTML = path
+        return
+      }
+      setTimeout(() => { entry.icon.innerHTML = path }, SWAP_DELAY)
     }
 
-    setTimeout(() => {
-      setIconPath(target.icon, active ? minusPath : plusPath)
-    }, ICON_SWAP_DELAY)
+    entries.forEach(entry => {
+      setItem(entry, entry.item.classList.contains('active'), false)
+
+      if (!entry.header) return
+      entry.header.addEventListener('click', () => {
+        const willOpen = !entry.item.classList.contains('active')
+        entries.forEach(e => setItem(e, false, true))
+        if (willOpen) setItem(entry, true, true)
+      })
+    })
   }
 
-  itemMap.forEach(target => {
-    updateItem(target, target.item.classList.contains('active'), false)
+  // ============================================================
+  // METRIC COUNTER
+  // ============================================================
 
-    if (!target.header) return
+  function initMetricCounters() {
+    document.querySelectorAll('.metric-number').forEach(el => {
+      const target = parseFloat(el.getAttribute('data-target'))
+      const suffix = el.getAttribute('data-suffix') || ''
+      const obj = { value: 0 }
 
-    target.header.addEventListener('click', () => {
-      const willOpen = !target.item.classList.contains('active')
-
-      itemMap.forEach(entry => updateItem(entry, false, true))
-
-      if (willOpen) {
-        updateItem(target, true, true)
-      }
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(obj, {
+            value: target,
+            duration: 1,
+            ease: 'power2.out',
+            onUpdate: () => {
+              el.textContent = (target % 1 === 0 ? Math.floor(obj.value) : obj.value.toFixed(1)) + suffix
+            }
+          })
+        },
+        once: true
+      })
     })
+  }
+
+  // ============================================================
+  // BOOTSTRAP
+  // ============================================================
+
+  onReady(() => {
+    // Non-GSAP features
+    initTopbarForm()
+    initHeaderScroll()
+    initLazyVideos()
+
+    // GSAP-dependent features
+    if (!gsapAvailable()) return
+
+    initHeroEntrance()
+    initStackingCards('.usecase-card', 'usecase-card--active', 'usecase-card--inactive', 64, true)
+    initStackingCards('.testimonial-card', 'testimonial-card--active', 'testimonial-card--inactive', 80, true)
+    initMoreCardAnimation()
+    initThemeTransitions()
+    initRevealAnimations()
+    initCreateSectionEntrance()
+    initDistractionHeader()
+    initAccordion()
+    initMetricCounters()
   })
-
-  // Metric Counting
-  const metrics = document.querySelectorAll('.metric-number');
-  metrics.forEach(metric => {
-    const target = parseFloat(metric.getAttribute('data-target'));
-    const suffix = metric.getAttribute('data-suffix') || '';
-    const obj = { value: 0 };
-    ScrollTrigger.create({
-      trigger: metric,
-      start: 'top 85%',
-      onEnter: () => {
-        gsap.to(obj, {
-          value: target,
-          duration: 1,
-          ease: 'power2.out',
-          onUpdate: () => {
-            const val = target % 1 === 0 ? Math.floor(obj.value) : obj.value.toFixed(1);
-            metric.textContent = val + suffix;
-          }
-        });
-      },
-      once: true
-    });
-  });
-
-});
+})()
