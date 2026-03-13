@@ -1198,13 +1198,12 @@ p {
   color: #6a1ebb;
 }
 
-.accordion-header i {
-  font-size: 1.25rem;
-  color: #64748b;
+.accordion-icon {
+  flex-shrink: 0;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.accordion-item.active .accordion-header i {
+.accordion-item.active .accordion-icon {
   transform: rotate(180deg);
 }
 

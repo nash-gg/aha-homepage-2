@@ -461,25 +461,40 @@ document.addEventListener('DOMContentLoaded', () => {
     icon: item.querySelector('.accordion-icon')
   }));
 
-  function updateItem(target, active) {
-    target.item.classList.toggle('active', active);
-    if (target.icon) {
-      target.icon.innerHTML = active ? minusPath : plusPath
+  const ICON_SWAP_DELAY = 200
+
+  function setIconPath(icon, path) {
+    if (icon) icon.innerHTML = path
+  }
+
+  function updateItem(target, active, animate) {
+    const wasActive = target.item.classList.contains('active')
+    target.item.classList.toggle('active', active)
+
+    if (!target.icon) return
+
+    if (!animate || wasActive === active) {
+      setIconPath(target.icon, active ? minusPath : plusPath)
+      return
     }
+
+    setTimeout(() => {
+      setIconPath(target.icon, active ? minusPath : plusPath)
+    }, ICON_SWAP_DELAY)
   }
 
   itemMap.forEach(target => {
-    updateItem(target, target.item.classList.contains('active'))
+    updateItem(target, target.item.classList.contains('active'), false)
 
     if (!target.header) return
 
     target.header.addEventListener('click', () => {
       const willOpen = !target.item.classList.contains('active')
 
-      itemMap.forEach(entry => updateItem(entry, false))
+      itemMap.forEach(entry => updateItem(entry, false, true))
 
       if (willOpen) {
-        updateItem(target, true)
+        updateItem(target, true, true)
       }
     })
   })
