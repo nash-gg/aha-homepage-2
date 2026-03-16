@@ -132,7 +132,7 @@ p {
   background: transparent;
   font-size: 0.85rem;
   color: #9ca3af;
-  width: 100%;
+  width: 100px;
   padding-right: 8px;
   font-family: inherit;
   font-weight: 600;
@@ -1488,6 +1488,10 @@ p {
     width: 100%;
     max-width: 320px;
     justify-content: space-between;
+  }
+
+  .topbar-input {
+    width: 100%;
   }
 
   /* Hero */
