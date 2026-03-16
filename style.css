@@ -608,7 +608,7 @@ p {
   position: absolute;
   inset: -1px 0;
   /* Extend slightly to prevent gaps */
-  background: linear-gradient(0deg, var(--theme-1-bg) 0%, rgba(26, 26, 46, 0.2) 50%, transparent 100%);
+  background: linear-gradient(0deg, var(--theme-1-bg) 0%, color-mix(in srgb, var(--theme-1-bg) 20%, transparent) 50%, transparent 100%);
   pointer-events: none;
   z-index: 2;
 }
