@@ -406,7 +406,7 @@ p {
 .integration-grid {
   display: flex;
   flex-direction: row;
-  gap: 1.5rem;
+  gap: 4rem;
   flex-wrap: wrap;
   max-width: 100%;
   width: 100%;
@@ -416,7 +416,7 @@ p {
 }
 
 .integration-card {
-  padding: 12px 20px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -424,22 +424,15 @@ p {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  background-color: #ffffff;
   color: #1e293b;
   /* Fallback/Initial */
-  border: 1px solid #E3E3E3;
-  border-radius: 8px;
   box-shadow: none;
+  color: var(--theme-text);
   transition: all 0.3s ease;
 }
 
-#hero .integration-card {
-  color: #1a1a2e;
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
 .integration-card:hover {
-  background-color: #F9F5FF;
+  color: #6a1ebb;
 }
 
 .integration-card img {
