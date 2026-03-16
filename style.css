@@ -330,11 +330,6 @@ p {
   /* Default color matching the previous explicit fill */
 }
 
-.hero-visuals:hover .bg-splash {
-  color: #FFBACA;
-  transform: translate(-20%, -20%) scale(0.9);
-}
-
 /* Floating Elements Animation */
 @keyframes float {
 
@@ -350,7 +345,6 @@ p {
 
 .floating {
   z-index: 1;
-  animation: float 6s ease-in-out infinite;
 }
 
 .audience-1 {
