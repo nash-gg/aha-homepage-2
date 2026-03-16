@@ -411,17 +411,20 @@
 
     const others = [...header.children].filter(el => el.tagName !== 'H2')
     gsap.set(others, { y: 30, opacity: 0 })
+
+    const isMobile = window.matchMedia('(max-width: 767px)').matches
+
     ScrollTrigger.create({
       trigger: header,
-      start: 'top 85%',
+      start: isMobile ? 'top 95%' : 'top 85%',
       onEnter: () => gsap.to(others, { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' }),
       once: true
     })
 
     ScrollTrigger.create({
-      trigger: section || header,
-      start: 'bottom 80%',
-      end: 'top top',
+      trigger: header,
+      start: isMobile ? 'top 95%' : 'top 85%',
+      end: isMobile ? 'bottom 40%' : 'bottom 50%',
       onUpdate: (self) => {
         const progress = self.progress
         charGroups.forEach(chars => {
