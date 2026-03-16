@@ -95,6 +95,10 @@ p {
   transform: translateY(-100%);
 }
 
+.header .header-wrapper {
+  max-width: 1440px;
+}
+
 /* Topbar */
 .topbar {
   background-color: #F0F4FF;
