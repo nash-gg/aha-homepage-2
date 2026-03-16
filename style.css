@@ -128,7 +128,8 @@ p {
   background: transparent;
   font-size: 0.85rem;
   color: #9ca3af;
-  width: 100px;
+  width: 100%;
+  padding-right: 8px;
   font-family: inherit;
   font-weight: 600;
 }
@@ -1826,11 +1827,6 @@ p {
   .topbar-url {
     display: none;
     /* Hide URL label to save space in topbar */
-  }
-
-  .topbar-input {
-    width: 80px;
-    /* Smaller input */
   }
 
   .hero-slide {
