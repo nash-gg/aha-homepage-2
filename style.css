@@ -519,7 +519,6 @@ p {
   display: flex;
   justify-content: center;
   overflow: hidden;
-  background-color: var(--theme-1-bg);
 }
 
 .usecase-card__image-wrap.static-image,
