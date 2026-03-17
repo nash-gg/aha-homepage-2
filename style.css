@@ -1373,6 +1373,10 @@ p {
     right: -5%;
   }
 
+  .integration-grid {
+    gap: 2rem;
+  }
+
   /* Usecase Cards */
   .usecase-card {
     top: 4rem;
