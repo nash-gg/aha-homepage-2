@@ -51,7 +51,6 @@ body {
 
 a {
   text-decoration: none;
-  color: inherit;
   transition: color var(--transition-speed);
 }
 
@@ -205,7 +204,6 @@ p {
 }
 
 .hero-content h1 {
-  font-size: 48px;
   color: var(--theme-text);
   margin-bottom: 1.5rem;
   background: none;
@@ -391,7 +389,6 @@ p {
 .integrations h3 {
   margin-bottom: 2rem;
   color: var(--theme-text);
-  font-size: 1.5rem;
   position: relative;
   z-index: 1;
   transition: color 0.3s ease;
@@ -461,7 +458,6 @@ p {
 }
 
 .create-header h2 {
-  font-size: 2.5rem;
   color: #fff;
   margin-bottom: 0;
 }
@@ -609,7 +605,6 @@ p {
 }
 
 .usecase-card__content h3 {
-  font-size: clamp(2rem, 4vw, 3.5rem);
   color: #fff;
   margin-bottom: 2rem;
   line-height: 1.1;
@@ -668,7 +663,6 @@ p {
 }
 
 .create-main-title {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
   color: #ffffff;
   text-align: center;
   max-width: 100%;
@@ -750,7 +744,6 @@ p {
 }
 
 .why-pick-header h2 {
-  font-size: 2.5rem;
   color: #1e293b;
   margin-bottom: 1rem;
 }
@@ -808,7 +801,6 @@ p {
 }
 
 .card-text h3 {
-  font-size: 1.5rem;
   color: #1a1a2e;
 }
 
@@ -860,7 +852,6 @@ p {
 }
 
 .distraction-header h2 {
-  font-size: 2.5rem;
   color: #1e293b;
   line-height: 1.2;
   margin-bottom: 3rem;
@@ -936,7 +927,6 @@ p {
 }
 
 .science-header h2 {
-  font-size: 2.5rem;
   color: #1e293b;
 }
 
@@ -1005,7 +995,6 @@ p {
 }
 
 .blog-content h3 {
-  font-size: 1.125rem;
   line-height: 1.4;
   color: #1e293b;
   display: -webkit-box;
@@ -1152,7 +1141,6 @@ p {
 }
 
 .testimonials-header h2 {
-  font-size: 2.5rem;
   color: #1e293b;
 }
 
@@ -1332,7 +1320,6 @@ p {
   }
 
   .hero-content h1 {
-    font-size: 32px;
     line-height: 1.1;
   }
 
@@ -1385,10 +1372,6 @@ p {
   .usecase-card__content {
     margin-top: -20px;
     padding: 0 1.25rem 2.5rem;
-  }
-
-  .usecase-card__content h3 {
-    font-size: 1.75rem;
   }
 
   .card-features {
@@ -1473,7 +1456,6 @@ p {
   }
 
   .distraction-header h2 {
-    font-size: 1.5rem;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 2rem;
@@ -1552,7 +1534,6 @@ p {
   }
 
   .hero-content h1 {
-    font-size: 44px;
     margin-bottom: 1.5rem;
     color: var(--theme-text);
     letter-spacing: -0.02em;
@@ -1627,7 +1608,6 @@ p {
 
   /* Integrations */
   .integrations h3 {
-    font-size: 1.5rem;
     margin-bottom: 2rem;
   }
 
@@ -1671,10 +1651,6 @@ p {
     padding: 4rem 1rem;
   }
 
-  .science-header h2 {
-    font-size: 1.75rem;
-  }
-
   /* Testimonials */
   .testimonial-text blockquote {
     font-size: 1.25rem;
@@ -1701,10 +1677,6 @@ p {
 }
 
 @media screen and (max-width: 478px) {
-  .create-main-title {
-    font-size: 2rem;
-  }
-
   .gradient-transition-hero {
     height: 150px;
   }
@@ -1714,7 +1686,6 @@ p {
   }
 
   .create-header h2 {
-    font-size: 1.75rem;
     color: #fff;
     margin-bottom: 0;
   }
