@@ -1741,12 +1741,12 @@ p {
 
   .visual-item.floating.audience-1 {
     top: 0%;
-    left: -10%;
+    left: -20%;
   }
 
   .visual-item.floating.quiz-chart {
     bottom: -25%;
-    left: -12%;
+    left: -20%;
     z-index: 2;
   }
 
@@ -1757,7 +1757,7 @@ p {
 
   .visual-item.floating.phone-chart {
     top: 0;
-    right: -12%;
+    right: -20%;
   }
 
   .usecase-card {
