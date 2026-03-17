@@ -1041,7 +1041,6 @@ p {
 }
 
 .faq-header h2 {
-  font-size: 3rem;
   color: #1e293b;
   margin-bottom: 2rem;
   line-height: 1.1;
@@ -1720,13 +1719,18 @@ p {
     margin-bottom: 0;
   }
 
-  .hero-content h1 {
-    font-size: 28px;
-  }
-
   .topbar-url {
     display: none;
     /* Hide URL label to save space in topbar */
+  }
+
+  #hero {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  .hero-visuals {
+    margin-top: 0;
   }
 
   .hero-slide {
@@ -1760,7 +1764,21 @@ p {
     right: -20%;
   }
 
+  .create-section,
+  .why-pick-section,
+  .testimonials-section,
+  .distraction-section,
+  .science-section,
+  .faq-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
   .usecase-card {
     background-color: var(--theme-1-bg);
+  }
+
+  .testimonial-card {
+    flex-direction: column-reverse;
   }
 }
