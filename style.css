@@ -1434,6 +1434,10 @@ p {
     text-align: left;
   }
 
+  .testimonial-text blockquote {
+    font-size: 1.5rem;
+  }
+
   .user-info {
     border-right: none;
     padding-right: 0;
@@ -1453,6 +1457,50 @@ p {
 
   .blog-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .distraction-container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    text-align: center;
+  }
+
+  .distraction-header {
+    text-align: center;
+  }
+
+  .distraction-header h2 {
+    font-size: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
+  }
+
+  .metric-item {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+
+  .metric-item.metric-1-bg {
+    background-color: #D8FAEF;
+    width: 100%;
+  }
+
+  .metric-item.metric-2-bg {
+    background-color: #E4E4F7;
+    width: 100%;
+  }
+
+  .metric-number {
+    min-width: auto;
+    font-size: 2.25rem;
+  }
+
+  .metric-text {
+    max-width: 100%;
+    text-align: center;
   }
 }
 
@@ -1609,48 +1657,6 @@ p {
 
   .blog-grid {
     grid-template-columns: 1fr;
-  }
-
-  .distraction-container {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    text-align: center;
-  }
-
-  .distraction-header {
-    text-align: center;
-  }
-
-  .distraction-header h2 {
-    font-size: 1.5rem;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 2rem;
-  }
-
-  .metric-item {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1.25rem 1.5rem;
-    text-align: center;
-  }
-
-  .metric-1-bg {
-    background-color: #D8FAEF;
-  }
-
-  .metric-2-bg {
-    background-color: #E4E4F7;
-  }
-
-  .metric-number {
-    min-width: auto;
-    font-size: 2.25rem;
-  }
-
-  .metric-text {
-    max-width: 100%;
-    text-align: center;
   }
 
   /* Science */
