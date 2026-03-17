@@ -489,7 +489,6 @@ p {
   margin-bottom: 5rem;
   border-radius: 24px;
   overflow: hidden;
-  background-color: var(--theme-1-bg);
   transition: box-shadow 0.6s ease;
   /* Prevent sub-pixel rendering gaps during scale/scroll */
   -webkit-backface-visibility: hidden;
@@ -1746,5 +1745,9 @@ p {
   .visual-item.floating.phone-chart {
     top: 0;
     right: -12%;
+  }
+
+  .usecase-card {
+    background-color: var(--theme-1-bg);
   }
 }
