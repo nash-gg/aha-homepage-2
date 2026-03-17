@@ -1422,7 +1422,6 @@ p {
   }
 
   .testimonial-card {
-    flex-direction: column-reverse;
     padding: 2rem 1rem;
     gap: 1.5rem;
     text-align: left;
