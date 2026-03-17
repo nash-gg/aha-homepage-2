@@ -247,6 +247,9 @@
     mm.add('(max-width: 767px)', () => {
       build({ end: endOffset, scrub: 2, dispersalLg: -150, dispersalSm: -120 })
     })
+    mm.add('(max-width: 478px)', () => {
+      build({ end: endOffset, scrub: 2, dispersalLg: -80, dispersalSm: -100 })
+    })
     mm.add('(min-width: 992px)', () => {
       build({ end: endOffset, scrub: 1.5, dispersalLg: -140, dispersalSm: -80 })
     })
