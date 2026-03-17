@@ -238,12 +238,14 @@
         .to('.item-4', { y: opts.dispersalSm, duration: 2, ease: 'power1.out' }, 1.5)
     }
 
+    const endOffset = () => 'bottom top+=' + window.innerHeight * 1.4
+
     const mm = gsap.matchMedia()
     mm.add('(max-width: 767px)', () => {
-      build({ end: 'bottom top+=1200', scrub: 2, dispersalLg: -150, dispersalSm: -120 })
+      build({ end: endOffset, scrub: 2, dispersalLg: -150, dispersalSm: -120 })
     })
     mm.add('(min-width: 768px)', () => {
-      build({ end: 'bottom top+=800', scrub: 1.5, dispersalLg: -280, dispersalSm: -220 })
+      build({ end: endOffset, scrub: 1.5, dispersalLg: -280, dispersalSm: -220 })
     })
   }
 
