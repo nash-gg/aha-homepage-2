@@ -1299,8 +1299,8 @@ p {
   /* grayscale logo look */
 }
 
-.trusted-logos img {
-  width: 200px;
+.trusted-logos .homepage-brand-logo {
+  width: 160px;
   height: auto;
   object-fit: cover;
   transition: filter 0.3s;
@@ -1677,7 +1677,7 @@ p {
     gap: 0;
   }
 
-  .trusted-logos img {
+  .trusted-logos .homepage-brand-logo {
     width: 160px;
     height: auto;
     object-fit: cover;
