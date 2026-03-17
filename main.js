@@ -245,7 +245,7 @@
       build({ end: endOffset, scrub: 2, dispersalLg: -150, dispersalSm: -120 })
     })
     mm.add('(min-width: 768px)', () => {
-      build({ end: endOffset, scrub: 1.5, dispersalLg: -280, dispersalSm: -220 })
+      build({ end: endOffset, scrub: 1.5, dispersalLg: -140, dispersalSm: -80 })
     })
   }
 
