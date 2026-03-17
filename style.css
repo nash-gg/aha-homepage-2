@@ -1502,6 +1502,10 @@ p {
     max-width: 100%;
     text-align: center;
   }
+
+  .testimonial-card {
+    margin-bottom: 2.5rem;
+  }
 }
 
 @media (max-width: 767px) {
