@@ -962,6 +962,11 @@ p {
   font-size: 1.125rem;
 }
 
+.blog-title a {
+  color: #1e293b;
+  line-height: normal;
+}
+
 .blog-image-img {
   width: 100%;
   height: 100%;
@@ -991,7 +996,6 @@ p {
 
 .blog-content h3 {
   line-height: 1.4;
-  color: #1e293b;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
