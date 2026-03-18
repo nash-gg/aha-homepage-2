@@ -298,7 +298,6 @@ p {
   position: absolute;
   border-radius: 20px;
   transition: scale 0.3s ease, box-shadow 0.3s ease;
-  opacity: 0;
 }
 
 .visual-item.speaker {
@@ -316,7 +315,6 @@ p {
   background-color: #FFE3E9;
   border-radius: 24px;
   clip-path: border-box;
-  opacity: 0;
 }
 
 .bg-splash {

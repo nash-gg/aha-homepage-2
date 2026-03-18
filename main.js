@@ -129,17 +129,20 @@
     const floats = document.querySelectorAll('.visual-item.floating')
     if (!bg && !speaker && !floats.length) return
 
+    if (bg) gsap.set(bg, { opacity: 0 })
+    if (speaker) gsap.set(speaker, { opacity: 0 })
+    if (floats.length) gsap.set(floats, { opacity: 0, scale: 0.95 })
+
     const tl = gsap.timeline({ delay: 0.1 })
 
     if (bg) {
-      tl.fromTo(bg, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' })
+      tl.to(bg, { opacity: 1, duration: 0.5, ease: 'power2.out' })
     }
     if (speaker) {
-      tl.fromTo(speaker, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+      tl.to(speaker, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
     }
     if (floats.length) {
-      tl.fromTo(floats,
-        { opacity: 0, scale: 0.95 },
+      tl.to(floats,
         { opacity: 1, scale: 1, duration: 0.5, stagger: 0.1, ease: 'back.out(1.2)' },
         '-=0.2'
       )
