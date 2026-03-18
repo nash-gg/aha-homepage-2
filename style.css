@@ -1351,6 +1351,10 @@ p {
     gap: 2rem;
   }
 
+  .create-header {
+    max-width: 420px;
+  }
+
   /* Usecase Cards */
   .usecase-card {
     top: 4rem;
@@ -1592,6 +1596,10 @@ p {
   .visual-item.floating.phone-chart {
     top: 0;
     right: 0;
+  }
+
+  .create-header {
+    max-width: 500px;
   }
 
   /* Integrations */
