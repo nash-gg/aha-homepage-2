@@ -195,10 +195,6 @@
         } else {
           card.classList.add(inactiveClass, 'card--upcoming')
         }
-
-        card.querySelectorAll('.card-dot').forEach((dot, di) => {
-          dot.classList.toggle('card-dot--active', di === activeIndex)
-        })
       })
     }
 
