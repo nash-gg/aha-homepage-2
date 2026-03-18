@@ -150,7 +150,7 @@
   // STICKY STACKING CARDS
   // ============================================================
 
-  function initStackingCards(cardSelector, activeClass, inactiveClass, stickyTop, immediateTransition) {
+  function initStackingCards(cardSelector, stickyTop) {
     const cards = document.querySelectorAll(cardSelector)
     if (!cards.length) return
 
@@ -159,18 +159,13 @@
 
       if (i < cards.length - 1) {
         const nextCard = cards[i + 1]
-        const cardHeight = card.offsetHeight
-        const triggerEl = immediateTransition ? card : nextCard
-        const startPoint = immediateTransition
-          ? `top ${stickyTop}px`
-          : `top ${stickyTop + cardHeight * 0.5}px`
 
         gsap.to(card, {
           scale: 0.8,
           opacity: 0,
           scrollTrigger: {
-            trigger: triggerEl,
-            start: startPoint,
+            trigger: card,
+            start: `top ${stickyTop}px`,
             endTrigger: nextCard,
             end: `top ${stickyTop}px`,
             scrub: true
@@ -186,15 +181,7 @@
       })
 
       cards.forEach((card, i) => {
-        card.classList.remove(activeClass, inactiveClass, 'card--past', 'card--upcoming')
-
-        if (i === activeIndex) {
-          card.classList.add(activeClass)
-        } else if (i < activeIndex) {
-          card.classList.add(inactiveClass, 'card--past')
-        } else {
-          card.classList.add(inactiveClass, 'card--upcoming')
-        }
+        card.classList.toggle('card--past', i < activeIndex)
       })
     }
 
@@ -527,8 +514,8 @@
     if (!gsapAvailable()) return
 
     initHeroEntrance()
-    initStackingCards('.usecase-card', 'usecase-card--active', 'usecase-card--inactive', 64, true)
-    initStackingCards('.testimonial-card', 'testimonial-card--active', 'testimonial-card--inactive', 80, true)
+    initStackingCards('.usecase-card', 64)
+    initStackingCards('.testimonial-card', 80)
     initMoreCardAnimation()
     initThemeTransitions()
     initRevealAnimations()

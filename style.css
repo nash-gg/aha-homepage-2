@@ -651,15 +651,8 @@ p {
   line-height: 1.4;
 }
 
-/* Inactive (Past): dimmed and scaled down to feel "under" the stack */
 .usecase-card.card--past {
   pointer-events: none;
-}
-
-/* Inactive (Upcoming): natural state */
-.usecase-card.card--upcoming {
-  opacity: 1;
-  transform: scale(1);
 }
 
 .create-main-title {
@@ -1188,11 +1181,6 @@ p {
 
 .testimonial-card.card--past {
   pointer-events: none;
-}
-
-.testimonial-card.card--upcoming {
-  opacity: 1;
-  transform: scale(1);
 }
 
 .testimonial-content {
