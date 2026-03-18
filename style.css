@@ -958,15 +958,6 @@ p {
   overflow: hidden;
 }
 
-.blog-title {
-  font-size: 1.125rem;
-}
-
-.blog-title a {
-  color: #1e293b;
-  line-height: normal;
-}
-
 .blog-image-img {
   width: 100%;
   height: 100%;
@@ -994,13 +985,15 @@ p {
   letter-spacing: 0.05em;
 }
 
-.blog-content h3 {
-  line-height: 1.4;
+.blog-content .blog-title {
+  font-size: 1.125rem;
+  line-height: normal;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  color: #1e293b;
 }
 
 .science-cta {
