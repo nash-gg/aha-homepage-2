@@ -167,9 +167,8 @@
           scale: 0.8,
           opacity: 0,
           scrollTrigger: {
-            trigger: card,
-            start: `top ${stickyTop}px`,
-            endTrigger: nextCard,
+            trigger: nextCard,
+            start: `top 50%`,
             end: `top ${stickyTop}px`,
             scrub: true
           }
@@ -190,7 +189,6 @@
 
     window.addEventListener('scroll', rafThrottle(updateActive), { passive: true })
     updateActive()
-    ScrollTrigger.refresh()
   }
 
   // ============================================================
@@ -508,6 +506,9 @@
   // ============================================================
 
   onReady(() => {
+    if (window.__ahaMainInitialized) return
+    window.__ahaMainInitialized = true
+
     // Non-GSAP features
     initTopbarForm()
     initHeaderScroll()
