@@ -873,7 +873,7 @@ p {
 .metric-number {
   font-size: 2.5rem;
   font-weight: 600;
-  color: #262626;
+  color: #fff;
   min-width: 120px;
   letter-spacing: -1px;
   flex-shrink: 0;
@@ -882,18 +882,18 @@ p {
 .metric-text {
   font-size: 1.1rem;
   font-weight: 400;
-  color: #262626;
+  color: #fff;
   line-height: 1.4;
   max-width: 320px;
 }
 
 /* Metric card background classes (use on .metric-item for custom colors) */
 .metric-1-bg {
-  background-color: #DEFFED;
+  background-color: #ff4081;
 }
 
 .metric-2-bg {
-  background-color: #EBDEFF;
+  background-color: #6a1ebb;
 }
 
 /* Science Section */
