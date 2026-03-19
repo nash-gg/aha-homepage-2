@@ -231,17 +231,17 @@
     const endOffset = () => 'bottom top+=' + window.innerHeight * 1.4
 
     const mm = gsap.matchMedia()
-    mm.add('(max-width: 991px)', () => {
-      build({ end: endOffset, scrub: 2, dispersalLg: -110, dispersalSm: -80 })
-    })
-    mm.add('(max-width: 767px)', () => {
-      build({ end: endOffset, scrub: 2, dispersalLg: -150, dispersalSm: -120 })
-    })
-    mm.add('(max-width: 478px)', () => {
-      build({ end: endOffset, scrub: 2, dispersalLg: -80, dispersalSm: -100 })
-    })
-    mm.add('(min-width: 992px)', () => {
-      build({ end: endOffset, scrub: 1.5, dispersalLg: -140, dispersalSm: -80 })
+    mm.add({
+      small:  '(max-width: 478px)',
+      medium: '(min-width: 479px) and (max-width: 767px)',
+      tablet: '(min-width: 768px) and (max-width: 991px)',
+      desktop:'(min-width: 992px)'
+    }, (ctx) => {
+      const { small, medium, tablet } = ctx.conditions
+      if (small)       build({ end: endOffset, scrub: 2, dispersalLg: -80, dispersalSm: -100 })
+      else if (medium) build({ end: endOffset, scrub: 2, dispersalLg: -150, dispersalSm: -120 })
+      else if (tablet) build({ end: endOffset, scrub: 2, dispersalLg: -110, dispersalSm: -80 })
+      else             build({ end: endOffset, scrub: 1.5, dispersalLg: -140, dispersalSm: -80 })
     })
   }
 
