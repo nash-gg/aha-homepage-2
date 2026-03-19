@@ -153,13 +153,15 @@
   // STICKY STACKING CARDS
   // ============================================================
 
-  function initStackingCards(cardSelector, stickyTop) {
+  function initStackingCards(cardSelector) {
     const cards = document.querySelectorAll(cardSelector)
     if (!cards.length) return
 
     ScrollTrigger.getAll()
       .filter(st => cards[Symbol.iterator] && [...cards].some(c => st.trigger === c || st.vars?.trigger === c))
       .forEach(st => st.kill())
+
+    const getStickyTop = (card) => parseFloat(getComputedStyle(card).top) || 0
 
     cards.forEach((card, i) => {
       card.style.zIndex = i + 1
@@ -174,11 +176,14 @@
           scrollTrigger: {
             trigger: nextCard,
             start: () => {
+              const stickyTop = getStickyTop(card)
               const minRange = window.innerHeight * 0.45
               const cardBottom = stickyTop + card.offsetHeight
-              return `top ${Math.max(cardBottom, stickyTop + minRange)}px`
+              const startVal = Math.max(cardBottom, stickyTop + minRange)
+              console.table({ cardSelector, cardIndex: i, nextCardIndex: i + 1, stickyTop, cardOffsetHeight: card.offsetHeight, minRange, cardBottom, startVal, end: stickyTop })
+              return `top ${startVal}px`
             },
-            end: `top ${stickyTop}px`,
+            end: () => `top ${getStickyTop(card)}px`,
             scrub: true,
             invalidateOnRefresh: true
           }
@@ -189,7 +194,7 @@
     const updateActive = () => {
       let activeIndex = -1
       cards.forEach((card, i) => {
-        if (card.getBoundingClientRect().top <= stickyTop + 15) activeIndex = i
+        if (card.getBoundingClientRect().top <= getStickyTop(card) + 15) activeIndex = i
       })
 
       cards.forEach((card, i) => {
@@ -527,8 +532,8 @@
     if (!gsapAvailable()) return
 
     initHeroEntrance()
-    initStackingCards('.usecase-card', 64)
-    initStackingCards('.testimonial-card', 80)
+    initStackingCards('.usecase-card')
+    initStackingCards('.testimonial-card')
     initMoreCardAnimation()
     initThemeTransitions()
     initRevealAnimations()
