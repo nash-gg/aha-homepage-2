@@ -205,12 +205,50 @@
     })
   }
 
+  // Testimonial stacking: separate logic so animation triggers only when next card touches previous card (no early fade from margin).
   function initTestimonialStackingCards() {
-    setupStackingCards('.testimonial-card', (card, stickyTop) => {
-      const cardBottom = stickyTop + card.offsetHeight
-      const marginBottom = parseFloat(getComputedStyle(card).marginBottom) || 0
-      return `top ${cardBottom + marginBottom}px`
+    const cards = document.querySelectorAll('.testimonial-card')
+    if (!cards.length) return
+
+    ScrollTrigger.getAll()
+      .filter(st => [...cards].some(c => st.trigger === c || st.vars?.trigger === c))
+      .forEach(st => st.kill())
+
+    const getStickyTop = (card) => parseFloat(getComputedStyle(card).top) || 0
+
+    cards.forEach((card, i) => {
+      card.style.zIndex = i + 1
+      gsap.set(card, { clearProps: 'scale,opacity' })
+
+      if (i < cards.length - 1) {
+        const nextCard = cards[i + 1]
+        // Start when next card top touches current card bottom (trigger animation only on touch, not earlier).
+        gsap.to(card, {
+          scale: 0.8,
+          opacity: 0,
+          scrollTrigger: {
+            trigger: nextCard,
+            start: () => `top ${getStickyTop(card) + card.offsetHeight}px`,
+            end: () => `top ${getStickyTop(card)}px`,
+            scrub: true,
+            invalidateOnRefresh: true
+          }
+        })
+      }
     })
+
+    const updateActive = () => {
+      let activeIndex = -1
+      cards.forEach((card, i) => {
+        if (card.getBoundingClientRect().top <= getStickyTop(card) + 15) activeIndex = i
+      })
+      cards.forEach((card, i) => {
+        card.classList.toggle('card--past', i < activeIndex)
+      })
+    }
+
+    window.addEventListener('scroll', rafThrottle(updateActive), { passive: true })
+    updateActive()
   }
 
   // ============================================================
