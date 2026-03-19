@@ -568,8 +568,7 @@ p {
 }
 
 .usecase-card__image {
-  width: auto;
-  max-width: 100%;
+  width: 100%;
   aspect-ratio: 2.2 / 1;
   object-fit: contain;
   /* Preserve exact ratio */
@@ -1240,6 +1239,7 @@ p {
   flex: 1;
   height: 100%;
   min-height: 350px;
+  aspect-ratio: 1 / 1;
 }
 
 .testimonial-image-img {
