@@ -153,12 +153,12 @@
   // STICKY STACKING CARDS
   // ============================================================
 
-  function initStackingCards(cardSelector) {
+  function setupStackingCards(cardSelector, getStart) {
     const cards = document.querySelectorAll(cardSelector)
     if (!cards.length) return
 
     ScrollTrigger.getAll()
-      .filter(st => cards[Symbol.iterator] && [...cards].some(c => st.trigger === c || st.vars?.trigger === c))
+      .filter(st => [...cards].some(c => st.trigger === c || st.vars?.trigger === c))
       .forEach(st => st.kill())
 
     const getStickyTop = (card) => parseFloat(getComputedStyle(card).top) || 0
@@ -175,7 +175,7 @@
           opacity: 0,
           scrollTrigger: {
             trigger: nextCard,
-            start: () => `top ${getStickyTop(card) + card.offsetHeight}px`,
+            start: () => getStart(card, getStickyTop(card)),
             end: () => `top ${getStickyTop(card)}px`,
             scrub: true,
             invalidateOnRefresh: true
@@ -197,6 +197,20 @@
 
     window.addEventListener('scroll', rafThrottle(updateActive), { passive: true })
     updateActive()
+  }
+
+  function initUsecaseStackingCards() {
+    setupStackingCards('.usecase-card', (card, stickyTop) => {
+      return `top ${stickyTop + card.offsetHeight}px`
+    })
+  }
+
+  function initTestimonialStackingCards() {
+    setupStackingCards('.testimonial-card', (card, stickyTop) => {
+      const cardBottom = stickyTop + card.offsetHeight
+      const marginBottom = parseFloat(getComputedStyle(card).marginBottom) || 0
+      return `top ${cardBottom + marginBottom}px`
+    })
   }
 
   // ============================================================
@@ -525,8 +539,8 @@
     if (!gsapAvailable()) return
 
     initHeroEntrance()
-    initStackingCards('.usecase-card')
-    initStackingCards('.testimonial-card')
+    initUsecaseStackingCards()
+    initTestimonialStackingCards()
     initMoreCardAnimation()
     initThemeTransitions()
     initRevealAnimations()
