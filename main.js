@@ -275,30 +275,10 @@
         start: 'top 90%', end: 'top 70%'
       },
       {
-        trigger: '.gradient-transition-what-you-can-create',
-        vars: {
-          '--theme-1-bg': '#F4F8FF', '--theme-1-gradient-start': '#F4F8FF',
-          '--theme-text': '#1a1a2e', '--theme-text-secondary': '#475569',
-          '--theme-card-text': '#1a1a2e', '--theme-card-desc': '#64748b',
-          '--theme-icon': '#64748b', '--theme-cta-bg': '#6d28d9', '--theme-cta-text': '#ffffff'
-        },
-        start: 'center 80%', end: 'center 20%'
-      },
-      {
         trigger: '.gradient-transition-why-pick',
         vars: { '--theme-2-bg': '#FFF', '--theme-2-gradient-start': '#FFF' },
         start: 'center 80%', end: 'center 20%'
       },
-      {
-        trigger: '.gradient-transition-testimonials',
-        vars: { '--theme-3-bg': '#FFE3E9', '--theme-3-gradient-start': '#FFE3E9' },
-        start: 'center 80%', end: 'center 20%'
-      },
-      {
-        trigger: '.gradient-transition-blog',
-        vars: { '--theme-4-bg': '#FFFFFF', '--theme-4-gradient-start': '#FFFFFF' },
-        start: 'center 80%', end: 'center 20%'
-      }
     ]
 
     zones.forEach(({ trigger, vars, start, end }) => {
