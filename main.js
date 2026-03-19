@@ -322,7 +322,6 @@
     reveal('.why-pick-grid', '.why-pick-card', { stagger: 0.15 })
     reveal('.why-pick-cta', '.btn', { stagger: 0.1 })
     reveal('.testimonials-header', 'h2')
-    reveal('.testimonials-list', '.testimonial-card', { stagger: 0.15 })
     reveal('.trusted-by', 'p, .trusted-logos img', { stagger: 0.05 })
     reveal('.testimonials-cta', '.btn')
     reveal('.distraction-header', '.distraction-cta')
