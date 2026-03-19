@@ -1159,7 +1159,6 @@ p {
   transition: box-shadow 0.6s ease;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transform: translateZ(0);
   will-change: transform, opacity;
 }
 
