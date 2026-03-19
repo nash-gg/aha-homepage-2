@@ -1655,17 +1655,21 @@ p {
   }
 
   .trusted-logos {
-    gap: 0;
+    gap: 1rem;
   }
 
   .trusted-logos .homepage-brand-logo {
-    width: 160px;
+    width: 120px;
     height: auto;
     object-fit: cover;
   }
 
   .author-brand-wrap {
     gap: 0;
+  }
+
+  .card-text h3 {
+    font-size: 1.25rem;
   }
 }
 
