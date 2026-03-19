@@ -167,16 +167,16 @@
 
       if (i < cards.length - 1) {
         const nextCard = cards[i + 1]
-        const cardBottom = stickyTop + card.offsetHeight
 
         gsap.to(card, {
           scale: 0.8,
           opacity: 0,
           scrollTrigger: {
             trigger: nextCard,
-            start: `top ${cardBottom}px`,
+            start: () => `top ${stickyTop + card.offsetHeight}px`,
             end: `top ${stickyTop}px`,
-            scrub: true
+            scrub: true,
+            invalidateOnRefresh: true
           }
         })
       }
