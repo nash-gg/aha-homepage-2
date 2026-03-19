@@ -272,7 +272,7 @@
       {
         trigger: '.gradient-transition-hero',
         vars: { '--theme-bg': '#1a1a2e', '--theme-text': '#ffffff' },
-        start: 'top 40%', end: 'bottom 50%'
+        start: 'top 90%', end: 'top 70%'
       },
       {
         trigger: '.gradient-transition-what-you-can-create',

@@ -166,7 +166,7 @@ p {
   /* Use theme variable so JS transitions can affect the hero like other sections */
   background: var(--theme-bg);
   overflow: hidden;
-  padding: 3rem 2rem 6rem 2rem;
+  padding: 3rem 2rem 3rem 2rem;
   gap: 64px;
   position: relative;
   z-index: 2;
@@ -432,7 +432,7 @@ p {
 /* What You Can Create Section */
 .create-section {
   padding: 6rem 1rem;
-  background-color: var(--theme-1-bg);
+  background-color: var(--theme-bg);
   display: flex;
   justify-content: center;
   position: relative;
@@ -454,13 +454,13 @@ p {
 }
 
 .create-header h2 {
-  color: #fff;
+  color: var(--theme-text);
   margin-bottom: 0;
 }
 
 .create-header p {
   font-size: 1.15rem;
-  color: #fff;
+  color: var(--theme-text);
   margin-bottom: 2rem;
 }
 
@@ -581,7 +581,7 @@ p {
   position: absolute;
   inset: -1px 0;
   /* Extend slightly to prevent gaps */
-  background: linear-gradient(0deg, var(--theme-1-bg) 0%, color-mix(in srgb, var(--theme-1-bg) 20%, transparent) 50%, transparent 100%);
+  background: linear-gradient(0deg, var(--theme-bg) 0%, color-mix(in srgb, var(--theme-bg) 20%, transparent) 50%, transparent 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -706,7 +706,7 @@ p {
 /* Extended background to cover white space during pin - constrained to parent */
 .gradient-transition-hero {
   height: 120px;
-  background: linear-gradient(180deg, var(--theme-bg) 0%, color-mix(in srgb, var(--theme-bg), var(--theme-1-bg) 20%) 30%, color-mix(in srgb, var(--theme-bg), var(--theme-1-bg) 50%) 50%, color-mix(in srgb, var(--theme-bg), var(--theme-1-bg) 80%) 70%, var(--theme-1-bg) 100%);
+  background: var(--theme-bg);
 }
 
 .gradient-transition-what-you-can-create {
@@ -1684,7 +1684,7 @@ p {
   }
 
   .create-header h2 {
-    color: #fff;
+    color: var(--theme-text);
     margin-bottom: 0;
   }
 
