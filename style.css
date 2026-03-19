@@ -358,7 +358,7 @@ p {
 .visual-item.floating.audience-2 {
   width: 220px;
   right: -5%;
-  bottom: 0;
+  bottom: -5%;
   animation-delay: 2.3s;
 }
 
