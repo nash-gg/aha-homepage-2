@@ -820,8 +820,8 @@ p {
 
 /* Distraction Section */
 .distraction-section {
-  background-color: var(--theme-4-bg);
-  padding: 2rem 2rem 8rem;
+  background-color: #fff;
+  padding: 6rem 2rem 6rem 2rem;
   display: flex;
   justify-content: center;
 }
@@ -898,7 +898,7 @@ p {
 
 /* Science Section */
 .science-section {
-  background-color: var(--theme-4-bg);
+  background-color: #fff;
   padding: 2rem 2rem 6rem;
   display: flex;
   justify-content: center;
@@ -1459,12 +1459,10 @@ p {
   }
 
   .metric-item.metric-1-bg {
-    background-color: #D8FAEF;
     width: 100%;
   }
 
   .metric-item.metric-2-bg {
-    background-color: #E4E4F7;
     width: 100%;
   }
 
