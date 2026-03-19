@@ -157,18 +157,24 @@
     const cards = document.querySelectorAll(cardSelector)
     if (!cards.length) return
 
+    ScrollTrigger.getAll()
+      .filter(st => cards[Symbol.iterator] && [...cards].some(c => st.trigger === c || st.vars?.trigger === c))
+      .forEach(st => st.kill())
+
     cards.forEach((card, i) => {
       card.style.zIndex = i + 1
+      gsap.set(card, { clearProps: 'scale,opacity' })
 
       if (i < cards.length - 1) {
         const nextCard = cards[i + 1]
+        const cardBottom = stickyTop + card.offsetHeight
 
         gsap.to(card, {
           scale: 0.8,
           opacity: 0,
           scrollTrigger: {
             trigger: nextCard,
-            start: `top 50%`,
+            start: `top ${cardBottom}px`,
             end: `top ${stickyTop}px`,
             scrub: true
           }
