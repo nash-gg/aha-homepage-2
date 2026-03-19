@@ -175,14 +175,7 @@
           opacity: 0,
           scrollTrigger: {
             trigger: nextCard,
-            start: () => {
-              const stickyTop = getStickyTop(card)
-              const minRange = window.innerHeight * 0.45
-              const cardBottom = stickyTop + card.offsetHeight
-              const startVal = Math.max(cardBottom, stickyTop + minRange)
-              console.table({ cardSelector, cardIndex: i, nextCardIndex: i + 1, stickyTop, cardOffsetHeight: card.offsetHeight, minRange, cardBottom, startVal, end: stickyTop })
-              return `top ${startVal}px`
-            },
+            start: () => `top ${getStickyTop(card) + card.offsetHeight}px`,
             end: () => `top ${getStickyTop(card)}px`,
             scrub: true,
             invalidateOnRefresh: true
