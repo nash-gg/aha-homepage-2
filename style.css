@@ -304,6 +304,7 @@ p {
   z-index: 2;
   /* Center the main image */
   position: relative;
+  height: auto;
 }
 
 .hero-visuals-bg {
