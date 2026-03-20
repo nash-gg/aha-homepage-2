@@ -861,7 +861,6 @@ p {
   border: none;
   justify-content: flex-start;
   width: auto;
-  color: #1a1a2e;
 }
 
 .metric-number {
@@ -877,15 +876,6 @@ p {
   font-weight: 400;
   line-height: 1.4;
   max-width: 320px;
-}
-
-/* Metric card background classes (use on .metric-item for custom colors) */
-.metric-1-bg {
-  background-color: #ffe3e9;
-}
-
-.metric-2-bg {
-  background-color: #d8faef;
 }
 
 /* Science Section */
@@ -1154,20 +1144,7 @@ p {
   will-change: transform, opacity;
 }
 
-.testimonial-card:first-child {
-  background-color: #E6D4FF;
-}
-
-.testimonial-card:nth-child(2) {
-  background-color: #FFE5D6;
-}
-
-.testimonial-card:nth-child(3) {
-  background-color: #FFE3E9;
-}
-
-.testimonial-card:nth-child(4) {
-  background-color: #D8FAEF;
+.testimonial-card:last-child {
   margin-bottom: 0;
 }
 
@@ -1191,7 +1168,6 @@ p {
 .testimonial-text blockquote {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #1a1a2e;
   line-height: 1.25;
   position: relative;
   z-index: 1;
@@ -1222,12 +1198,10 @@ p {
 
 .user-name {
   font-weight: 600;
-  color: #1a1a2e;
   font-size: 0.95rem;
 }
 
 .user-title {
-  color: #1a1a2e;
   font-size: 0.85rem;
 }
 
@@ -1452,13 +1426,6 @@ p {
     gap: 1rem;
     padding: 1.25rem 1.5rem;
     text-align: center;
-  }
-
-  .metric-item.metric-1-bg {
-    width: 100%;
-  }
-
-  .metric-item.metric-2-bg {
     width: 100%;
   }
 
