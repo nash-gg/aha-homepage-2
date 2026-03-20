@@ -808,16 +808,6 @@ p {
   background: linear-gradient(180deg, var(--theme-2-bg) 0%, color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 20%) 30%, color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 50%) 50%, color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 80%) 70%, var(--theme-3-bg) 100%);
 }
 
-.gradient-transition-testimonials {
-  height: 120px;
-  background: linear-gradient(180deg, var(--theme-3-bg) 0%, color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 20%) 30%, color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 50%) 50%, color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 80%) 70%, var(--theme-4-bg) 100%);
-}
-
-.gradient-transition-blog {
-  height: 120px;
-  background: linear-gradient(180deg, var(--theme-4-bg) 0%, color-mix(in srgb, var(--theme-4-bg), #FFFFFF 20%) 30%, color-mix(in srgb, var(--theme-4-bg), #FFFFFF 50%) 50%, color-mix(in srgb, var(--theme-4-bg), #FFFFFF 80%) 70%, #FFFFFF 100%);
-}
-
 /* Distraction Section */
 .distraction-section {
   background-color: #fff;
@@ -1738,8 +1728,8 @@ p {
   .distraction-section,
   .science-section,
   .faq-section {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 
   .usecase-card {
@@ -1748,5 +1738,9 @@ p {
 
   .testimonial-card {
     flex-direction: column-reverse;
+  }
+
+  .gradient-transition-why-pick {
+    height: 50px;
   }
 }
