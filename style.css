@@ -861,12 +861,12 @@ p {
   border: none;
   justify-content: flex-start;
   width: auto;
+  color: #1a1a2e;
 }
 
 .metric-number {
   font-size: 2.5rem;
   font-weight: 600;
-  color: #fff;
   min-width: 120px;
   letter-spacing: -1px;
   flex-shrink: 0;
@@ -875,18 +875,17 @@ p {
 .metric-text {
   font-size: 1.1rem;
   font-weight: 400;
-  color: #fff;
   line-height: 1.4;
   max-width: 320px;
 }
 
 /* Metric card background classes (use on .metric-item for custom colors) */
 .metric-1-bg {
-  background-color: #ff4081;
+  background-color: #ffe3e9;
 }
 
 .metric-2-bg {
-  background-color: #6a1ebb;
+  background-color: #d8faef;
 }
 
 /* Science Section */
@@ -1156,19 +1155,19 @@ p {
 }
 
 .testimonial-card:first-child {
-  background-color: #FF4081;
+  background-color: #E6D4FF;
 }
 
 .testimonial-card:nth-child(2) {
-  background-color: #6A1EBB;
+  background-color: #FFE5D6;
 }
 
 .testimonial-card:nth-child(3) {
-  background-color: #FF4081;
+  background-color: #FFE3E9;
 }
 
 .testimonial-card:nth-child(4) {
-  background-color: #6A1EBB;
+  background-color: #D8FAEF;
   margin-bottom: 0;
 }
 
@@ -1192,7 +1191,7 @@ p {
 .testimonial-text blockquote {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #fff;
+  color: #1a1a2e;
   line-height: 1.25;
   position: relative;
   z-index: 1;
@@ -1223,12 +1222,12 @@ p {
 
 .user-name {
   font-weight: 600;
-  color: #fff;
+  color: #1a1a2e;
   font-size: 0.95rem;
 }
 
 .user-title {
-  color: rgba(255, 255, 255, 0.6);
+  color: #1a1a2e;
   font-size: 0.85rem;
 }
 
