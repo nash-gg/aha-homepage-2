@@ -384,7 +384,8 @@ p {
   padding: 3rem 0 0 0;
 }
 
-.integrations h3 {
+.integrations .integrations-title {
+  font-size: 1.5rem;
   margin-bottom: 2rem;
   color: var(--theme-text);
   position: relative;
