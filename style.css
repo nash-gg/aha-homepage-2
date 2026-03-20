@@ -1596,7 +1596,7 @@ p {
   }
 
   /* Integrations */
-  .integrations h3 {
+  .integrations .integrations-title {
     margin-bottom: 2rem;
   }
 
