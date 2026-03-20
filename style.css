@@ -176,7 +176,7 @@ p {
 
 .hero-container {
   display: flex;
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
   align-items: center;
   gap: 4rem;
@@ -827,7 +827,7 @@ p {
 }
 
 .distraction-container {
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -905,7 +905,7 @@ p {
 }
 
 .science-container {
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
 }
 
@@ -1007,7 +1007,7 @@ p {
 }
 
 .faq-container {
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1.5fr;
@@ -1120,7 +1120,7 @@ p {
 }
 
 .testimonials-container {
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
 }
 
@@ -1176,6 +1176,7 @@ p {
 
 .testimonial-card:nth-child(4) {
   background-color: #6A1EBB;
+  margin-bottom: 0;
 }
 
 .testimonial-card.card--past {
@@ -1658,6 +1659,7 @@ p {
 
   .trusted-logos {
     gap: 1rem;
+    justify-content: space-around;
   }
 
   .trusted-logos .homepage-brand-logo {
