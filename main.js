@@ -300,6 +300,29 @@
       if (!el) return
       gsap.to(root, { ...vars, ease: 'none', scrollTrigger: { trigger: el, start, end, scrub: 1 } })
     })
+
+    // Binary class toggles: parallel to GSAP tween for properties that can't use CSS variables (images, filters, etc.)
+    const classToggles = [
+      {
+        trigger: '.gradient-transition-hero',
+        start: 'top 80%',
+        cls: 'theme-dark',
+        target: root,
+      },
+      // Add new zones here as needed:
+      // { trigger: '.gradient-transition-why-pick', start: 'center 80%', cls: 'theme-light', target: root },
+    ]
+
+    classToggles.forEach(({ trigger, start, cls, target }) => {
+      const el = document.querySelector(trigger)
+      if (!el) return
+      ScrollTrigger.create({
+        trigger: el,
+        start,
+        onEnter: () => target.classList.add(cls),
+        onLeaveBack: () => target.classList.remove(cls),
+      })
+    })
   }
 
   // ============================================================
