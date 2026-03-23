@@ -1186,7 +1186,6 @@ p {
 
 .author-brand-wrap {
   display: flex;
-  align-items: left;
   gap: 1.5rem;
 }
 
@@ -1376,7 +1375,6 @@ p {
   }
 
   .testimonial-footer {
-    align-items: left;
     text-align: left;
   }
 
