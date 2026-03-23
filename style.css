@@ -855,6 +855,7 @@ p {
   gap: 2rem;
   padding: 2rem;
   border-radius: 12px;
+  width: 100%;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -1424,7 +1425,6 @@ p {
     gap: 1rem;
     padding: 1.25rem 1.5rem;
     text-align: center;
-    width: 100%;
   }
 
   .metric-number {
