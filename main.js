@@ -120,6 +120,36 @@
   }
 
   // ============================================================
+  // HERO ENTRANCE
+  // ============================================================
+
+  function initHeroEntrance() {
+    const bg = document.querySelector('.hero-visuals-bg')
+    const speaker = document.querySelector('.visual-item.speaker')
+    const floats = document.querySelectorAll('.visual-item.floating')
+    if (!bg && !speaker && !floats.length) return
+
+    if (bg) gsap.set(bg, { opacity: 0 })
+    if (speaker) gsap.set(speaker, { opacity: 0 })
+    if (floats.length) gsap.set(floats, { opacity: 0, scale: 0.95 })
+
+    const tl = gsap.timeline({ delay: 0.1 })
+
+    if (bg) {
+      tl.to(bg, { opacity: 1, duration: 0.5, ease: 'power2.out' })
+    }
+    if (speaker) {
+      tl.to(speaker, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+    }
+    if (floats.length) {
+      tl.to(floats,
+        { opacity: 1, scale: 1, duration: 0.5, stagger: 0.1, ease: 'back.out(1.2)' },
+        '-=0.2'
+      )
+    }
+  }
+
+  // ============================================================
   // STICKY STACKING CARDS
   // ============================================================
 
@@ -555,6 +585,7 @@
     // GSAP-dependent features
     if (!gsapAvailable()) return
 
+    initHeroEntrance()
     initUsecaseStackingCards()
     initTestimonialStackingCards()
     initMoreCardAnimation()
