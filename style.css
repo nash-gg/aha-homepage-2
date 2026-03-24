@@ -176,7 +176,7 @@ p {
 
 .hero-container {
   display: flex;
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
   align-items: center;
   gap: 4rem;
@@ -304,6 +304,8 @@ p {
   z-index: 2;
   /* Center the main image */
   position: relative;
+  height: auto;
+  aspect-ratio: 489 / 511;
 }
 
 .hero-visuals-bg {
@@ -315,6 +317,7 @@ p {
   background-color: #FFE3E9;
   border-radius: 24px;
   clip-path: border-box;
+  overflow: hidden;
 }
 
 .bg-splash {
@@ -343,7 +346,7 @@ p {
 
 .visual-item.floating.audience-1 {
   width: 240px;
-  left: -5%;
+  left: -4%;
   top: 10%;
   animation-delay: 0s;
 }
@@ -357,7 +360,7 @@ p {
 
 .visual-item.floating.audience-2 {
   width: 220px;
-  right: -5%;
+  right: -4%;
   bottom: -5%;
   animation-delay: 2.3s;
 }
@@ -366,7 +369,7 @@ p {
   width: 200px;
   height: auto;
   top: 0;
-  right: -5%;
+  right: -4%;
   object-fit: cover;
 }
 
@@ -382,7 +385,8 @@ p {
   padding: 3rem 0 0 0;
 }
 
-.integrations h3 {
+.integrations .integrations-title {
+  font-size: 1.5rem;
   margin-bottom: 2rem;
   color: var(--theme-text);
   position: relative;
@@ -426,6 +430,10 @@ p {
   width: 24px;
   height: 24px;
   object-fit: contain;
+}
+
+.theme-dark .integration-card[data-integration-id="chatgpt"] img {
+  filter: brightness(0) invert(1);
 }
 
 /* Breakpoints (Sygnal standard)- Mobile portrait (tiny): up to 478px- Mobile landscape (small): up to 767px- Tablet (medium): up to 991px- Desktop base (main): 992px–1279px- Large: 1280px and above- Extra large (xl): 1440px and above- Very large (xxl): 1920px and above*/
@@ -808,16 +816,6 @@ p {
   background: linear-gradient(180deg, var(--theme-2-bg) 0%, color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 20%) 30%, color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 50%) 50%, color-mix(in srgb, var(--theme-2-bg), var(--theme-3-bg) 80%) 70%, var(--theme-3-bg) 100%);
 }
 
-.gradient-transition-testimonials {
-  height: 120px;
-  background: linear-gradient(180deg, var(--theme-3-bg) 0%, color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 20%) 30%, color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 50%) 50%, color-mix(in srgb, var(--theme-3-bg), var(--theme-4-bg) 80%) 70%, var(--theme-4-bg) 100%);
-}
-
-.gradient-transition-blog {
-  height: 120px;
-  background: linear-gradient(180deg, var(--theme-4-bg) 0%, color-mix(in srgb, var(--theme-4-bg), #FFFFFF 20%) 30%, color-mix(in srgb, var(--theme-4-bg), #FFFFFF 50%) 50%, color-mix(in srgb, var(--theme-4-bg), #FFFFFF 80%) 70%, #FFFFFF 100%);
-}
-
 /* Distraction Section */
 .distraction-section {
   background-color: #fff;
@@ -827,7 +825,7 @@ p {
 }
 
 .distraction-container {
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -862,6 +860,7 @@ p {
   gap: 2rem;
   padding: 2rem;
   border-radius: 12px;
+  width: 100%;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -873,7 +872,6 @@ p {
 .metric-number {
   font-size: 2.5rem;
   font-weight: 600;
-  color: #fff;
   min-width: 120px;
   letter-spacing: -1px;
   flex-shrink: 0;
@@ -882,18 +880,8 @@ p {
 .metric-text {
   font-size: 1.1rem;
   font-weight: 400;
-  color: #fff;
   line-height: 1.4;
   max-width: 320px;
-}
-
-/* Metric card background classes (use on .metric-item for custom colors) */
-.metric-1-bg {
-  background-color: #ff4081;
-}
-
-.metric-2-bg {
-  background-color: #6a1ebb;
 }
 
 /* Science Section */
@@ -905,7 +893,7 @@ p {
 }
 
 .science-container {
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
 }
 
@@ -1007,7 +995,7 @@ p {
 }
 
 .faq-container {
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1.5fr;
@@ -1120,7 +1108,7 @@ p {
 }
 
 .testimonials-container {
-  max-width: 90rem;
+  max-width: 1440px;
   width: 100%;
 }
 
@@ -1157,22 +1145,13 @@ p {
   margin-left: auto;
   margin-right: auto;
   transition: box-shadow 0.6s ease;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
 }
 
-.testimonial-card:first-child {
-  background-color: #FF4081;
-}
-
-.testimonial-card:nth-child(2) {
-  background-color: #6A1EBB;
-}
-
-.testimonial-card:nth-child(3) {
-  background-color: #FF4081;
-}
-
-.testimonial-card:nth-child(4) {
-  background-color: #6A1EBB;
+.testimonial-card:last-child {
+  margin-bottom: 0;
 }
 
 .testimonial-card.card--past {
@@ -1195,7 +1174,6 @@ p {
 .testimonial-text blockquote {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #fff;
   line-height: 1.25;
   position: relative;
   z-index: 1;
@@ -1214,7 +1192,6 @@ p {
 
 .author-brand-wrap {
   display: flex;
-  align-items: left;
   gap: 1.5rem;
 }
 
@@ -1226,12 +1203,10 @@ p {
 
 .user-name {
   font-weight: 600;
-  color: #fff;
   font-size: 0.95rem;
 }
 
 .user-title {
-  color: rgba(255, 255, 255, 0.6);
   font-size: 0.85rem;
 }
 
@@ -1406,7 +1381,6 @@ p {
   }
 
   .testimonial-footer {
-    align-items: left;
     text-align: left;
   }
 
@@ -1456,14 +1430,6 @@ p {
     gap: 1rem;
     padding: 1.25rem 1.5rem;
     text-align: center;
-  }
-
-  .metric-item.metric-1-bg {
-    width: 100%;
-  }
-
-  .metric-item.metric-2-bg {
-    width: 100%;
   }
 
   .metric-number {
@@ -1599,7 +1565,7 @@ p {
   }
 
   /* Integrations */
-  .integrations h3 {
+  .integrations .integrations-title {
     margin-bottom: 2rem;
   }
 
@@ -1655,6 +1621,7 @@ p {
 
   .trusted-logos {
     gap: 1rem;
+    justify-content: space-around;
   }
 
   .trusted-logos .homepage-brand-logo {
@@ -1733,8 +1700,8 @@ p {
   .distraction-section,
   .science-section,
   .faq-section {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 
   .usecase-card {
@@ -1743,5 +1710,9 @@ p {
 
   .testimonial-card {
     flex-direction: column-reverse;
+  }
+
+  .gradient-transition-why-pick {
+    height: 50px;
   }
 }

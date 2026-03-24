@@ -173,6 +173,7 @@
         gsap.to(card, {
           scale: 0.8,
           opacity: 0,
+          ease: 'none',
           scrollTrigger: {
             trigger: nextCard,
             start: () => getStart(card, getStickyTop(card)),
@@ -205,11 +206,13 @@
     })
   }
 
-  // Testimonial stacking: separate logic so animation triggers only when next card touches previous card (no early fade from margin).
+  // Testimonial: pure scroll listener + getBoundingClientRect — zero GSAP dependency.
+  // Bypasses all GSAP ease/default/IX2 interference; inline style always wins.
   function initTestimonialStackingCards() {
     const cards = document.querySelectorAll('.testimonial-card')
     if (!cards.length) return
 
+    gsap.killTweensOf(cards)
     ScrollTrigger.getAll()
       .filter(st => [...cards].some(c => st.trigger === c || st.vars?.trigger === c))
       .forEach(st => st.kill())
@@ -218,37 +221,40 @@
 
     cards.forEach((card, i) => {
       card.style.zIndex = i + 1
-      gsap.set(card, { clearProps: 'scale,opacity' })
-
-      if (i < cards.length - 1) {
-        const nextCard = cards[i + 1]
-        // Start when next card top touches current card bottom (trigger animation only on touch, not earlier).
-        gsap.to(card, {
-          scale: 0.8,
-          opacity: 0,
-          scrollTrigger: {
-            trigger: nextCard,
-            start: () => `top ${getStickyTop(card) + card.offsetHeight}px`,
-            end: () => `top ${getStickyTop(card)}px`,
-            scrub: true,
-            invalidateOnRefresh: true
-          }
-        })
-      }
+      card.style.transition = 'none'
+      card.style.opacity = ''
+      card.style.transform = ''
     })
 
-    const updateActive = () => {
+    const update = () => {
       let activeIndex = -1
+
       cards.forEach((card, i) => {
-        if (card.getBoundingClientRect().top <= getStickyTop(card) + 15) activeIndex = i
+        const stickyTop = getStickyTop(card)
+        if (card.getBoundingClientRect().top <= stickyTop + 15) activeIndex = i
+        card.classList.toggle('card--past', false)
+
+        if (i >= cards.length - 1) return
+
+        const nextCard = cards[i + 1]
+        const startY = stickyTop + card.offsetHeight
+        const endY = stickyTop
+        const nextY = nextCard.getBoundingClientRect().top
+
+        let p = 0
+        if (nextY <= endY) p = 1
+        else if (nextY < startY) p = (startY - nextY) / (startY - endY)
+
+        card.style.opacity = p > 0 ? String(1 - p) : ''
+        card.style.transform = p > 0 ? `scale(${1 - 0.2 * p}) translateZ(0)` : ''
       })
-      cards.forEach((card, i) => {
-        card.classList.toggle('card--past', i < activeIndex)
-      })
+
+      cards.forEach((card, i) => card.classList.toggle('card--past', i < activeIndex))
     }
 
-    window.addEventListener('scroll', rafThrottle(updateActive), { passive: true })
-    updateActive()
+    window.addEventListener('scroll', rafThrottle(update), { passive: true })
+    window.addEventListener('resize', rafThrottle(update), { passive: true })
+    update()
   }
 
   // ============================================================
@@ -323,6 +329,29 @@
       const el = document.querySelector(trigger)
       if (!el) return
       gsap.to(root, { ...vars, ease: 'none', scrollTrigger: { trigger: el, start, end, scrub: 1 } })
+    })
+
+    // Binary class toggles: parallel to GSAP tween for properties that can't use CSS variables (images, filters, etc.)
+    const classToggles = [
+      {
+        trigger: '.gradient-transition-hero',
+        start: 'top 80%',
+        cls: 'theme-dark',
+        target: root,
+      },
+      // Add new zones here as needed:
+      // { trigger: '.gradient-transition-why-pick', start: 'center 80%', cls: 'theme-light', target: root },
+    ]
+
+    classToggles.forEach(({ trigger, start, cls, target }) => {
+      const el = document.querySelector(trigger)
+      if (!el) return
+      ScrollTrigger.create({
+        trigger: el,
+        start,
+        onEnter: () => target.classList.add(cls),
+        onLeaveBack: () => target.classList.remove(cls),
+      })
     })
   }
 
